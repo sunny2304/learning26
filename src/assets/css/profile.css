@@ -1,0 +1,34 @@
+.profile{
+    display: inline-block;
+    margin-left: 562px;
+    margin-top: 45px;
+    
+}
+.profiletable{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+    width: 100%;
+    border-radius: 15px ;
+    border-style: none;
+    border-spacing: 0px;
+    font-size: 20px;
+    font-style: italic;
+}
+
+th,td{
+    border: 1px solid black;
+    padding: 7px;
+    text-align: center;
+}
+tr:nth-child(even){
+    background-color: azure;
+}
+tr:nth-child(odd){
+    background-color: rgb(255, 240, 240);
+}
+
+.viratimg{
+    border: 2px solid black;
+    margin: 0;
+    padding: 0;
+}
+
