@@ -20,8 +20,8 @@ function App() {
   
   return (
     <div>
-      {/* <Navbar></Navbar>
-      <Routes> 
+      <Navbar></Navbar>
+      {/* <Routes> 
         <Route path='/' element={<NetflixHome></NetflixHome>}></Route>
         <Route path='/movies' element={<NetflixMovies></NetflixMovies>}></Route>
         <Route path="/shows" element={<NetflixShows></NetflixShows>}></Route>
@@ -31,11 +31,11 @@ function App() {
         <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>
       </Routes>  */}
 
-<Routes>
+ <Routes>
   <Route path="/" element={<IplTeam />} />
   <Route path="/ipldetails/:name" element={<IplDetails />} />
   <Route path="/*" element={<PageNotFound />} />
-</Routes>
+</Routes> 
  
       
     </div>
