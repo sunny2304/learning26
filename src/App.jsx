@@ -34,6 +34,7 @@ function App() {
 <Routes>
   <Route path="/" element={<IplTeam />} />
   <Route path="/ipldetails/:name" element={<IplDetails />} />
+  <Route path="/*" element={<PageNotFound />} />
 </Routes>
  
       
