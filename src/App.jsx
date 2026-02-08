@@ -8,10 +8,12 @@ import { NetflixAnime } from './components/NetflixAnime'
 import { NetflixPopular } from './components/NetflixPopular'
 import { MapDemo5 } from './components/MapDemo5'
 import { MapDemo6 } from './components/MapDemo6'
-import { PageNotFound } from './PageNotFound'
+import { PageNotFound } from './components/PageNotFound'
 import { Watch } from './components/Watch'
 import { IplTeam } from './components/IplTeam'
 import { IplDetails } from './components/IplDetails'
+import { UseStateDemo1 } from './components/UseStateDemo1'
+import { UseStateDemo2 } from './components/UseStateDemo2'
 
 
 
@@ -20,8 +22,8 @@ function App() {
   
   return (
     <div>
-      <Navbar></Navbar>
-      {/* <Routes> 
+      {/*<Navbar></Navbar>
+       <Routes> 
         <Route path='/' element={<NetflixHome></NetflixHome>}></Route>
         <Route path='/movies' element={<NetflixMovies></NetflixMovies>}></Route>
         <Route path="/shows" element={<NetflixShows></NetflixShows>}></Route>
@@ -32,9 +34,10 @@ function App() {
       </Routes>  */}
 
  <Routes>
-  <Route path="/" element={<IplTeam />} />
-  <Route path="/ipldetails/:name" element={<IplDetails />} />
-  <Route path="/*" element={<PageNotFound />} />
+  {/* <Route path="/" element={<UseStateDemo1/>} /> */}
+  <Route path="/" element={<UseStateDemo2/>} />
+  {/* <Route path="/ipldetails/:name" element={<IplDetails />} />
+  <Route path="/*" element={<PageNotFound />} /> */}
 </Routes> 
  
       
