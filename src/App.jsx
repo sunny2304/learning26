@@ -14,6 +14,7 @@ import { IplTeam } from './components/IplTeam'
 import { IplDetails } from './components/IplDetails'
 import { UseStateDemo1 } from './components/UseStateDemo1'
 import { UseStateDemo2 } from './components/UseStateDemo2'
+import { FunctionDemo1 } from './components/FunctionDemo1'
 
 
 
@@ -35,7 +36,7 @@ function App() {
 
  <Routes>
   {/* <Route path="/" element={<UseStateDemo1/>} /> */}
-  <Route path="/" element={<UseStateDemo2/>} />
+  <Route path="/" element={<FunctionDemo1></FunctionDemo1>} />
   {/* <Route path="/ipldetails/:name" element={<IplDetails />} />
   <Route path="/*" element={<PageNotFound />} /> */}
 </Routes> 
