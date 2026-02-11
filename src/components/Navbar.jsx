@@ -14,7 +14,7 @@ export const Navbar = () => {
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            {/* <li class="nav-item active">
               <Link class="nav-link" to="/movies">Movies</Link>
             </li>
             <li class="nav-item active">
@@ -25,12 +25,19 @@ export const Navbar = () => {
             </li>
             <li class="nav-item active">
               <Link class="nav-link" to="/popular">New & Popular</Link>
+            </li> */}
+            {/* <li class="nav-item active">
+              <Link class="nav-link" to="/employee">Employess</Link>
             </li>
+            <li class="nav-item active">
+              <Link class="nav-link" to="/inputevent">input</Link>
+            </li> */}
+           
           </ul>
-          <form class="form-inline">
+          {/* <form class="form-inline">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+          </form> */}
         </div>
       </nav>
     </div>

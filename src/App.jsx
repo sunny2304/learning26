@@ -15,7 +15,15 @@ import { IplDetails } from './components/IplDetails'
 import { UseStateDemo1 } from './components/UseStateDemo1'
 import { UseStateDemo2 } from './components/UseStateDemo2'
 import { FunctionDemo1 } from './components/FunctionDemo1'
-
+import { EmployeeComponent } from './components/EmployeeComponent'
+import { InputEvent } from './components/InputEvent'
+import { InputTask } from './components/InputTask'
+import { FormDemo1 } from './components/forms/FormDemo1'
+import { FormTask1 } from './components/forms/FormTask1'
+import { FormTask2 } from './components/forms/FormTask2'
+import { FormTask3 } from './components/forms/FormTask3'
+import { InputTask1 } from './components/InputTask1'
+import { DependentDropdown } from './components/DependentDropdown'
 
 
 function App() {
@@ -23,25 +31,7 @@ function App() {
   
   return (
     <div>
-      {/*<Navbar></Navbar>
-       <Routes> 
-        <Route path='/' element={<NetflixHome></NetflixHome>}></Route>
-        <Route path='/movies' element={<NetflixMovies></NetflixMovies>}></Route>
-        <Route path="/shows" element={<NetflixShows></NetflixShows>}></Route>
-        <Route path='/anime' element={<NetflixAnime></NetflixAnime>}></Route>
-        <Route path='/popular' element={<NetflixPopular></NetflixPopular>}></Route>
-        <Route path='/watch/:name' element={<Watch></Watch>}></Route>
-        <Route path='/*' element={<PageNotFound></PageNotFound>}></Route>
-      </Routes>  */}
-
- <Routes>
-  {/* <Route path="/" element={<UseStateDemo1/>} /> */}
-  <Route path="/" element={<FunctionDemo1></FunctionDemo1>} />
-  {/* <Route path="/ipldetails/:name" element={<IplDetails />} />
-  <Route path="/*" element={<PageNotFound />} /> */}
-</Routes> 
- 
-      
+    <DependentDropdown/>
     </div>
   )
 

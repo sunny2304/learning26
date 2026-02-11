@@ -12,7 +12,7 @@ export const FunctionDemo1 = () => {
     <br />
     <br />
     <br />
-    <button onClick={test()}>Click</button>
+    <button onClick={test}>Click</button>
     <br />
     <br />
     <br />
