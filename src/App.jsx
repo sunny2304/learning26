@@ -24,6 +24,14 @@ import { FormTask2 } from './components/forms/FormTask2'
 import { FormTask3 } from './components/forms/FormTask3'
 import { InputTask1 } from './components/InputTask1'
 import { DependentDropdown } from './components/DependentDropdown'
+import { FormValidation } from './components/forms/FormValidation'
+import { Students } from './components/Students'
+import { FormDemo5 } from './components/forms/FormDemo5'
+import { StudentsDetails } from './components/StudentsDetails'
+import { StudentsTable } from './components/StudentsTable'
+import { FormValidation2 } from './components/forms/FormValidation2'
+import { FormValidation3 } from './components/forms/FormValidation3'
+import { FormTask4 } from './components/forms/FormTask4'
 
 
 function App() {
@@ -31,7 +39,8 @@ function App() {
   
   return (
     <div>
-    <DependentDropdown/>
+     {/* <DependentDropdown/> */}
+     <FormTask4/>
     </div>
   )
 
