@@ -32,6 +32,9 @@ import { StudentsTable } from './components/StudentsTable'
 import { FormValidation2 } from './components/forms/FormValidation2'
 import { FormValidation3 } from './components/forms/FormValidation3'
 import { FormTask4 } from './components/forms/FormTask4'
+import { FormTask5 } from './components/forms/FormTask5'
+import { ApiDemo1 } from './components/api/ApiDemo1'
+import { ApiDemo2 } from './components/api/ApiDemo2'
 
 
 function App() {
@@ -39,8 +42,7 @@ function App() {
   
   return (
     <div>
-     {/* <DependentDropdown/> */}
-     <FormTask4/>
+     <ApiDemo2/>
     </div>
   )
 
