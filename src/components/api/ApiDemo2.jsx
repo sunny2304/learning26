@@ -14,7 +14,7 @@ export const ApiDemo2 = () => {
 
     }
     return (
-    <div>
+    <div style={{textAlign:"center",margin:"10px"}}>     
         <h1>ApiDemo2</h1>
         <button onClick={()=>{getusers()}}>Get </button>
         <table className='table'>

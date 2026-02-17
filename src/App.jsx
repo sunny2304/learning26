@@ -35,6 +35,8 @@ import { FormTask4 } from './components/forms/FormTask4'
 import { FormTask5 } from './components/forms/FormTask5'
 import { ApiDemo1 } from './components/api/ApiDemo1'
 import { ApiDemo2 } from './components/api/ApiDemo2'
+import { ApiDemo3 } from './components/api/ApiDemo3'
+import { ApiDemo4 } from './components/api/ApiDemo4'
 
 
 function App() {
@@ -42,7 +44,7 @@ function App() {
   
   return (
     <div>
-     <ApiDemo2/>
+      <ApiDemo4/>
     </div>
   )
 
