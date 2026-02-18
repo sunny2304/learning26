@@ -37,6 +37,12 @@ import { ApiDemo1 } from './components/api/ApiDemo1'
 import { ApiDemo2 } from './components/api/ApiDemo2'
 import { ApiDemo3 } from './components/api/ApiDemo3'
 import { ApiDemo4 } from './components/api/ApiDemo4'
+import { OmdbApi } from './components/api/OmdbApi'
+import { MovieGrid } from './components/api/MovieGrid'
+import { MovieDetail } from './components/api/MovieDetail'
+import { MovieTask2 } from './components/api/MovieTask2'
+import { ApiDemo5 } from './components/api/ApiDemo5'
+import { ApiDemo6 } from './components/api/ApiDemo6'
 
 
 function App() {
@@ -44,14 +50,20 @@ function App() {
   
   return (
     <div>
-      <Navbar/>
+    {/*<Navbar/>
       <Routes>
-        <Route path="/apidemo1" element ={<ApiDemo1/>}></Route>
-        <Route path="/apidemo2" element ={<ApiDemo2/>}></Route>
-        <Route path="/apidemo3" element ={<ApiDemo3/>}></Route>
-        <Route path="/apidemo4" element ={<ApiDemo4/>}></Route>
-      </Routes>
-    
+      <Route path="/apidemo1" element ={<ApiDemo1/>}></Route>
+      <Route path="/apidemo2" element ={<ApiDemo2/>}></Route>
+      <Route path="/apidemo3" element ={<ApiDemo3/>}></Route>
+      <Route path="/apidemo4" element ={<ApiDemo4/>}></Route>
+      </Routes> */}
+      
+        {/* <Routes>
+        <Route path="/" element={<MovieGrid />} />
+        <Route path="/movie/:id" element={<MovieDetail/>} />
+        </Routes> */}
+
+        <ApiDemo6/>
     </div>
   )
 
