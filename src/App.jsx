@@ -44,7 +44,14 @@ function App() {
   
   return (
     <div>
-      <ApiDemo4/>
+      <Navbar/>
+      <Routes>
+        <Route path="/apidemo1" element ={<ApiDemo1/>}></Route>
+        <Route path="/apidemo2" element ={<ApiDemo2/>}></Route>
+        <Route path="/apidemo3" element ={<ApiDemo3/>}></Route>
+        <Route path="/apidemo4" element ={<ApiDemo4/>}></Route>
+      </Routes>
+    
     </div>
   )
 

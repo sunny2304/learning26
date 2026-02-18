@@ -8,9 +8,9 @@ export const Navbar = () => {
   return (
     <div>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="navimg">
+        {/* <div class="navimg">
           <Link to="/"><img src="nflx.png" alt="" srcset="" height={50} width={80} /></Link>
-        </div>
+        </div> */}
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -32,7 +32,18 @@ export const Navbar = () => {
             <li class="nav-item active">
               <Link class="nav-link" to="/inputevent">input</Link>
             </li> */}
-           
+            <li class="nav-item active">
+              <Link class="nav-link" to="/apidemo1">ApiDemo1</Link>
+            </li>
+            <li class="nav-item active">
+              <Link class="nav-link" to="/apidemo2">ApiDemo2</Link>
+            </li>
+            <li class="nav-item active">
+              <Link class="nav-link" to="/apidemo3">ApiDemo3</Link>
+            </li>
+            <li class="nav-item active">
+              <Link class="nav-link" to="/apidemo4">ApiDemo4</Link>
+            </li>
           </ul>
           {/* <form class="form-inline">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
