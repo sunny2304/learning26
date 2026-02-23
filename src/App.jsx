@@ -39,7 +39,7 @@ import { ApiDemo3 } from './components/api/ApiDemo3'
 import { ApiDemo4 } from './components/api/ApiDemo4'
 import { OmdbApi } from './components/api/OmdbApi'
 import { MovieGrid } from './components/api/MovieGrid'
-import { MovieDetail } from './components/api/MovieDetail'
+// import { MovieDetail } from './components/api/MovieDetail'
 import { MovieTask2 } from './components/api/MovieTask2'
 import { ApiDemo5 } from './components/api/ApiDemo5'
 import { ApiDemo6 } from './components/api/ApiDemo6'
@@ -64,6 +64,8 @@ function App() {
         </Routes> */}
 
         <ApiDemo6/>
+
+        {/* <MovieTask2/> */}
     </div>
   )
 
