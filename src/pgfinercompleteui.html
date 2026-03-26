@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PGFinder — Find Your Perfect Stay</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg: #f5f2ed;
+  --white: #ffffff;
+  --surface: #faf9f7;
+  --surface2: #f0ede8;
+  --border: #e2ddd6;
+  --navy: #1a2744;
+  --navy2: #243356;
+  --teal: #2a7c6f;
+  --teal-light: #3a9e8e;
+  --teal-pale: #e8f5f3;
+  --coral: #e05a3a;
+  --coral-pale: #fdf0ec;
+  --gold: #c8922a;
+  --gold-pale: #fdf6e8;
+  --blue: #3b6bcc;
+  --blue-pale: #eef2fb;
+  --text: #1a1a1a;
+  --text2: #3d3730;
+  --muted: #8a7f74;
+  --radius: 14px;
+  --shadow: 0 2px 16px rgba(26,39,68,0.08);
+  --shadow-lg: 0 8px 40px rgba(26,39,68,0.13);
+  --shadow-xl: 0 20px 60px rgba(26,39,68,0.18);
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:68px;
+  background:rgba(255,255,255,0.93);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 rgba(26,39,68,0.04);
+  transition:var(--transition);
+}
+.logo{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:900;color:var(--navy);letter-spacing:-0.5px;cursor:pointer;}
+.logo em{color:var(--teal);font-style:normal;}
+.nav-center{display:flex;gap:2px;align-items:center;}
+.nav-link{background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.87rem;font-weight:500;padding:8px 14px;border-radius:8px;transition:var(--transition);}
+.nav-link:hover,.nav-link.active{background:var(--surface2);color:var(--navy);}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-login{background:none;border:1.5px solid var(--border);cursor:pointer;color:var(--navy);font-family:'Outfit',sans-serif;font-size:0.87rem;font-weight:600;padding:8px 20px;border-radius:9px;transition:var(--transition);}
+.nav-login:hover{border-color:var(--navy);background:var(--surface2);}
+.nav-cta{background:var(--navy);color:#fff;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.87rem;font-weight:700;padding:9px 22px;border-radius:9px;box-shadow:0 2px 8px rgba(26,39,68,0.25);transition:var(--transition);}
+.nav-cta:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,39,68,0.3);}
+.nav-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:700;font-size:0.88rem;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
+.nav-avatar:hover{background:var(--navy2);}
+.hidden{display:none!important;}
+
+/* ═══════════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════════ */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:130px 24px 80px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1800&q=80');
+  background-size:cover;background-position:center 45%;
+  animation:heroZoom 14s ease-out both;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(26,39,68,0.65) 0%,rgba(26,39,68,0.42) 38%,rgba(245,242,237,0) 62%,rgba(245,242,237,1) 100%),linear-gradient(135deg,rgba(42,124,111,0.2) 0%,transparent 55%);
+  pointer-events:none;
+}
+.hero>*{position:relative;z-index:2;}
+@keyframes heroZoom{from{transform:scale(1.07);}to{transform:scale(1.0);}}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.4);backdrop-filter:blur(12px);color:#fff;font-size:0.75rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;padding:7px 18px;border-radius:40px;margin-bottom:32px;animation:fadeUp 0.6s ease both;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,7.5vw,6rem);font-weight:900;line-height:1.06;letter-spacing:-2.5px;color:#fff;text-shadow:0 4px 32px rgba(15,15,15,0.35);animation:fadeUp 0.65s 0.08s ease both;}
+.hero h1 i{color:#7dd3c8;font-style:italic;}
+.hero-sub{max-width:520px;margin:22px auto 0;color:rgba(255,255,255,0.82);font-size:1.05rem;line-height:1.75;font-weight:300;text-shadow:0 1px 8px rgba(15,15,15,0.3);animation:fadeUp 0.65s 0.16s ease both;}
+
+/* Search Box */
+.search-box{
+  margin:52px auto 0;background:rgba(255,255,255,0.97);border:1px solid rgba(255,255,255,0.6);
+  border-radius:20px;padding:28px;width:100%;max-width:800px;
+  display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end;
+  animation:fadeUp 0.65s 0.24s ease both;
+  box-shadow:0 24px 80px rgba(15,15,15,0.35),0 4px 16px rgba(15,15,15,0.15);
+  backdrop-filter:blur(16px);
+}
+.search-field label{display:block;font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;}
+.search-field input,.search-field select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.93rem;padding:12px 14px;transition:var(--transition);outline:none;appearance:none;}
+.search-field input:focus,.search-field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,111,0.1);}
+
+/* Stats */
+.stats-row{display:flex;gap:56px;justify-content:center;margin:68px auto 0;flex-wrap:wrap;animation:fadeUp 0.65s 0.32s ease both;}
+.stat{text-align:center;}
+.stat-num{font-family:'Fraunces',serif;font-size:2.5rem;font-weight:900;color:#fff;text-shadow:0 2px 12px rgba(15,15,15,0.25);}
+.stat-label{color:rgba(255,255,255,0.72);font-size:0.82rem;margin-top:5px;font-weight:500;}
+.stat-divider{width:1px;background:rgba(255,255,255,0.2);align-self:stretch;margin:8px 0;}
+
+/* ═══════════════════════════════════════════
+   SECTIONS & CARDS
+═══════════════════════════════════════════ */
+section{padding:96px 56px;}
+.section-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--teal);margin-bottom:14px;}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+.section-sub{color:var(--muted);font-size:1rem;max-width:460px;line-height:1.75;}
+
+/* Property Grid */
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-top:48px;}
+.prop-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow);}
+.prop-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:transparent;}
+.prop-img{height:200px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.prop-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+.prop-card:hover .prop-img img{transform:scale(1.05);}
+.prop-badge{position:absolute;top:14px;left:14px;font-size:0.68rem;font-weight:700;letter-spacing:0.5px;padding:4px 12px;border-radius:6px;}
+.badge-verified{background:var(--navy);color:#fff;}
+.badge-top{background:var(--teal);color:#fff;}
+.badge-new{background:var(--coral);color:#fff;}
+.prop-body{padding:22px;}
+.prop-name{font-family:'Fraunces',serif;font-size:1.12rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.prop-loc{color:var(--muted);font-size:0.83rem;margin-bottom:14px;display:flex;align-items:center;gap:5px;}
+.prop-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.tag{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:0.73rem;padding:4px 11px;border-radius:20px;font-weight:500;}
+.prop-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:16px;margin-top:4px;}
+.prop-price{font-weight:700;font-size:1.12rem;color:var(--navy);}
+.prop-price span{color:var(--muted);font-size:0.78rem;font-weight:400;}
+.prop-rating{display:flex;align-items:center;gap:5px;color:var(--gold);font-size:0.83rem;font-weight:700;}
+
+/* Features */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:48px;}
+.feat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:30px;transition:var(--transition);box-shadow:var(--shadow);}
+.feat-card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.feat-icon{width:50px;height:50px;background:var(--teal-pale);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--teal);margin-bottom:18px;}
+.feat-icon svg{width:22px;height:22px;}
+.feat-title{font-weight:700;font-size:0.98rem;color:var(--navy);margin-bottom:8px;}
+.feat-desc{color:var(--muted);font-size:0.86rem;line-height:1.65;}
+
+/* CTA Band */
+.cta-band{background:var(--navy);border-radius:20px;margin:0 56px 80px;padding:64px 56px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;overflow:hidden;}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 90% 50%,rgba(42,124,111,0.3),transparent);pointer-events:none;}
+.cta-band h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:#fff;}
+.cta-band p{color:rgba(255,255,255,0.6);margin-top:8px;font-size:0.96rem;}
+.btn-cta-outline{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.3);color:#fff;padding:14px 32px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:0.96rem;font-weight:700;cursor:pointer;transition:var(--transition);position:relative;white-space:nowrap;}
+.btn-cta-outline:hover{background:#fff;color:var(--navy);border-color:#fff;}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:40px 56px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;}
+.footer-brand .logo{font-size:1.3rem;margin-bottom:12px;display:block;}
+.footer-brand p{color:var(--muted);font-size:0.85rem;line-height:1.65;max-width:240px;}
+.footer-col h4{font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.8px;}
+.footer-col a{display:block;color:var(--muted);font-size:0.85rem;text-decoration:none;margin-bottom:10px;transition:var(--transition);}
+.footer-col a:hover{color:var(--navy);}
+.footer-bottom{border-top:1px solid var(--border);padding:20px 56px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:0.82rem;}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn{padding:10px 20px;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:var(--transition);display:inline-flex;align-items:center;gap:7px;}
+.btn:hover{transform:translateY(-1px);}
+.btn-sm{padding:6px 14px;border-radius:8px;font-size:0.78rem;}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 2px 6px rgba(26,39,68,0.2);}
+.btn-navy:hover{background:var(--navy2);}
+.btn-teal{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(42,124,111,0.25);}
+.btn-teal:hover{background:var(--teal-light);}
+.btn-ghost{background:var(--surface2);color:var(--text2);}
+.btn-ghost:hover{background:var(--border);}
+.btn-danger{background:var(--coral-pale);color:var(--coral);}
+.btn-danger:hover{background:rgba(224,90,58,0.15);}
+.btn-success{background:var(--teal-pale);color:var(--teal);}
+.btn-success:hover{background:rgba(42,124,111,0.15);}
+.btn-outline-navy{background:none;border:1.5px solid var(--navy);color:var(--navy);}
+.btn-outline-navy:hover{background:var(--navy);color:#fff;}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-full{width:100%;padding:14px;border-radius:12px;background:var(--navy);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:var(--transition);}
+.btn-full:hover{background:var(--navy2);transform:translateY(-1px);}
+.btn-full.teal{background:var(--teal);}
+.btn-full.teal:hover{background:var(--teal-light);}
+.btn-search{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:13px 30px;font-family:'Outfit',sans-serif;font-size:0.93rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--transition);display:flex;align-items:center;gap:8px;}
+.btn-search:hover{background:var(--navy2);transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════════
+   AUTH PAGES (LOGIN / SIGNUP)
+═══════════════════════════════════════════ */
+.auth-page{min-height:100vh;display:flex;align-items:stretch;}
+.auth-left{flex:1;background:var(--navy);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:60px;min-height:500px;}
+.auth-left::before{content:'';position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=900&q=80');background-size:cover;background-position:center;opacity:0.25;}
+.auth-left::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,39,68,0.97) 0%,rgba(26,39,68,0.4) 70%,transparent 100%);}
+.auth-left-content{position:relative;z-index:2;}
+.auth-left-content h2{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:16px;}
+.auth-left-content h2 i{color:#7dd3c8;font-style:italic;}
+.auth-left-content p{color:rgba(255,255,255,0.65);font-size:1rem;line-height:1.7;max-width:380px;}
+.auth-testimonial{margin-top:40px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:22px;backdrop-filter:blur(10px);}
+.auth-testimonial p{color:rgba(255,255,255,0.8);font-size:0.9rem;line-height:1.65;font-style:italic;}
+.auth-testimonial-author{display:flex;align-items:center;gap:10px;margin-top:14px;}
+.auth-testimonial-ava{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem;}
+.auth-testimonial-name{color:#fff;font-size:0.84rem;font-weight:600;}
+.auth-testimonial-role{color:rgba(255,255,255,0.5);font-size:0.75rem;}
+.auth-right{flex:0 0 500px;background:var(--white);display:flex;flex-direction:column;justify-content:center;padding:64px 56px;overflow-y:auto;}
+.auth-right h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:8px;}
+.auth-right .auth-sub{color:var(--muted);font-size:0.92rem;margin-bottom:36px;}
+.auth-right .auth-sub a,.auth-switch a{color:var(--teal);font-weight:600;cursor:pointer;text-decoration:none;}
+
+/* Form */
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;}
+.form-group label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.9px;color:var(--muted);}
+.form-group input,.form-group select,.form-group textarea{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.92rem;padding:12px 14px;transition:var(--transition);outline:none;resize:none;appearance:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,124,111,0.1);background:var(--white);}
+.form-group.has-icon{position:relative;}
+.form-group.has-icon input{padding-right:44px;}
+.form-group.has-icon .input-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-divider{display:flex;align-items:center;gap:16px;margin:24px 0;color:var(--muted);font-size:0.82rem;}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.social-btn{width:100%;padding:12px;border-radius:10px;background:var(--surface);border:1.5px solid var(--border);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text);margin-bottom:12px;}
+.social-btn:hover{border-color:var(--navy);background:var(--white);}
+.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.role-card{border:1.5px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:var(--transition);text-align:center;background:var(--surface);}
+.role-card:hover{border-color:var(--teal);}
+.role-card.selected{border-color:var(--teal);background:var(--teal-pale);}
+.role-card svg{width:28px;height:28px;color:var(--muted);margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;}
+.role-card.selected svg{color:var(--teal);}
+.role-card span{font-size:0.85rem;font-weight:600;color:var(--text2);}
+.role-card.selected span{color:var(--teal);}
+.remember-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.remember-row label{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text2);cursor:pointer;}
+.remember-row a{font-size:0.85rem;color:var(--teal);font-weight:600;cursor:pointer;text-decoration:none;}
+.auth-switch{text-align:center;margin-top:24px;font-size:0.88rem;color:var(--muted);}
+.pwd-strength{margin-top:6px;}
+.pwd-bars{display:flex;gap:4px;margin-bottom:4px;}
+.pwd-bar{flex:1;height:3px;border-radius:2px;background:var(--border);transition:var(--transition);}
+.pwd-bar.active-1{background:var(--coral);}
+.pwd-bar.active-2{background:var(--gold);}
+.pwd-bar.active-3{background:var(--teal);}
+.pwd-label{font-size:0.72rem;color:var(--muted);}
+
+/* ═══════════════════════════════════════════
+   LISTINGS / BROWSE PAGE
+═══════════════════════════════════════════ */
+.browse-layout{display:flex;min-height:calc(100vh - 68px);padding-top:68px;}
+.filter-sidebar{width:280px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:28px 20px;overflow-y:auto;position:sticky;top:68px;height:calc(100vh - 68px);}
+.filter-sidebar h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;}
+.filter-sidebar h3 span{font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;color:var(--teal);cursor:pointer;}
+.filter-group{margin-bottom:28px;}
+.filter-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:12px;display:block;}
+.filter-checks{display:flex;flex-direction:column;gap:9px;}
+.filter-check{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:0.87rem;color:var(--text2);}
+.filter-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--teal);cursor:pointer;}
+.range-inputs{display:flex;gap:8px;align-items:center;}
+.range-inputs input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.85rem;padding:9px 12px;outline:none;transition:var(--transition);}
+.range-inputs input:focus{border-color:var(--teal);}
+.range-sep{color:var(--muted);font-size:0.8rem;}
+.amenity-chips{display:flex;flex-wrap:wrap;gap:7px;}
+.amenity-chip{background:var(--surface);border:1.5px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:20px;font-size:0.76rem;font-weight:500;cursor:pointer;transition:var(--transition);}
+.amenity-chip.sel{background:var(--teal-pale);border-color:var(--teal);color:var(--teal);font-weight:600;}
+.listings-main{flex:1;padding:28px 32px;overflow-y:auto;}
+.listings-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.listings-topbar h2{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--navy);}
+.listings-topbar p{color:var(--muted);font-size:0.85rem;margin-top:2px;}
+.sort-select{background:var(--white);border:1.5px solid var(--border);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.85rem;padding:8px 14px;outline:none;cursor:pointer;}
+.listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+
+/* ═══════════════════════════════════════════
+   PROPERTY DETAIL PAGE
+═══════════════════════════════════════════ */
+.detail-page{padding-top:68px;}
+.detail-hero{height:460px;position:relative;overflow:hidden;}
+.detail-hero img{width:100%;height:100%;object-fit:cover;}
+.detail-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,39,68,0.7) 0%,transparent 50%);}
+.detail-hero-badges{position:absolute;top:28px;left:40px;display:flex;gap:10px;}
+.detail-back{position:absolute;top:28px;right:40px;}
+.detail-content{max-width:1100px;margin:0 auto;padding:40px 40px 80px;display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start;}
+.detail-main{}
+.detail-name{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:6px;}
+.detail-loc{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:0.9rem;margin-bottom:20px;}
+.detail-rating-row{display:flex;align-items:center;gap:20px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:28px;}
+.detail-rating-item{text-align:center;}
+.detail-rating-item .val{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;color:var(--navy);}
+.detail-rating-item .lbl{color:var(--muted);font-size:0.75rem;margin-top:2px;}
+.detail-section-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:16px;margin-top:28px;}
+.detail-desc{color:var(--text2);font-size:0.93rem;line-height:1.75;}
+.detail-amenities{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.detail-amenity{display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text2);padding:10px 14px;background:var(--surface);border-radius:10px;}
+.detail-amenity svg{width:16px;height:16px;color:var(--teal);flex-shrink:0;}
+.detail-reviews{display:flex;flex-direction:column;gap:16px;}
+.review-card{background:var(--surface);border-radius:12px;padding:18px;}
+.review-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.review-ava{width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.88rem;flex-shrink:0;}
+.review-name{font-weight:600;color:var(--navy);font-size:0.9rem;}
+.review-date{color:var(--muted);font-size:0.77rem;margin-top:2px;}
+.review-stars{color:var(--gold);font-size:0.85rem;margin-left:auto;}
+.review-text{color:var(--text2);font-size:0.87rem;line-height:1.65;}
+/* Booking card */
+.booking-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-lg);position:sticky;top:88px;}
+.booking-card-price{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:4px;}
+.booking-card-price span{font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:400;color:var(--muted);}
+.booking-form .form-group{margin-bottom:14px;}
+.booking-summary{background:var(--surface);border-radius:10px;padding:16px;margin:16px 0;}
+.booking-summary-row{display:flex;justify-content:space-between;font-size:0.87rem;padding:6px 0;border-bottom:1px solid var(--border);color:var(--text2);}
+.booking-summary-row:last-child{border-bottom:none;font-weight:700;color:var(--navy);font-size:0.95rem;}
+
+/* ═══════════════════════════════════════════
+   CHECKOUT & PAYMENT
+═══════════════════════════════════════════ */
+.checkout-page{padding-top:68px;min-height:100vh;background:var(--bg);}
+.checkout-wrap{max-width:1000px;margin:0 auto;padding:48px 24px;}
+.checkout-title{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:8px;}
+.checkout-sub{color:var(--muted);font-size:0.93rem;margin-bottom:36px;}
+.checkout-steps{display:flex;align-items:center;gap:0;margin-bottom:40px;}
+.checkout-step{display:flex;align-items:center;gap:10px;flex:1;}
+.step-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;transition:var(--transition);}
+.step-circle.done{background:var(--teal);color:#fff;}
+.step-circle.active{background:var(--navy);color:#fff;}
+.step-circle.pending{background:var(--border);color:var(--muted);}
+.step-label{font-size:0.82rem;font-weight:600;color:var(--muted);}
+.step-label.active{color:var(--navy);}
+.step-connector{flex:1;height:2px;background:var(--border);margin:0 8px;}
+.step-connector.done{background:var(--teal);}
+.checkout-grid{display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start;}
+.checkout-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);margin-bottom:20px;}
+.checkout-card h3{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.payment-methods{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.pay-method{border:1.5px solid var(--border);border-radius:10px;padding:12px 18px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;color:var(--text2);background:var(--surface);}
+.pay-method:hover{border-color:var(--navy);}
+.pay-method.active{border-color:var(--teal);background:var(--teal-pale);color:var(--teal);}
+.pay-method svg{width:20px;height:20px;}
+.card-input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.order-summary-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:sticky;top:88px;}
+.order-summary-card h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:18px;}
+.order-prop-img{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:14px;}
+.order-prop-name{font-weight:700;color:var(--navy);font-size:0.95rem;margin-bottom:4px;}
+.order-prop-loc{color:var(--muted);font-size:0.82rem;margin-bottom:16px;}
+.order-line{display:flex;justify-content:space-between;font-size:0.87rem;padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);}
+.order-line:last-child{border-bottom:none;font-weight:700;color:var(--navy);font-size:1rem;padding-top:12px;}
+.coupon-row{display:flex;gap:8px;margin-top:16px;}
+.coupon-row input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-family:'Outfit',sans-serif;font-size:0.85rem;color:var(--text);outline:none;transition:var(--transition);}
+.coupon-row input:focus{border-color:var(--teal);}
+.secure-badge{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:0.78rem;margin-top:16px;padding:10px;background:var(--surface);border-radius:8px;}
+.secure-badge svg{width:14px;height:14px;color:var(--teal);}
+
+/* Payment Success */
+.payment-success{text-align:center;padding:80px 24px;}
+.success-icon{width:80px;height:80px;border-radius:50%;background:var(--teal-pale);border:3px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;}
+.success-icon svg{width:36px;height:36px;color:var(--teal);}
+.payment-success h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:10px;}
+.payment-success p{color:var(--muted);font-size:1rem;max-width:460px;margin:0 auto 32px;line-height:1.7;}
+.booking-ref{background:var(--teal-pale);border:1.5px solid rgba(42,124,111,0.3);border-radius:12px;padding:16px 28px;display:inline-block;margin-bottom:32px;}
+.booking-ref span{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);display:block;margin-bottom:4px;}
+.booking-ref strong{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;color:var(--navy);}
+
+/* ═══════════════════════════════════════════
+   USER PROFILE
+═══════════════════════════════════════════ */
+.profile-layout{padding-top:68px;min-height:100vh;background:var(--bg);}
+.profile-header{background:var(--navy);padding:48px 56px;position:relative;overflow:hidden;}
+.profile-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 90% at 100% 50%,rgba(42,124,111,0.3),transparent);}
+.profile-header-content{position:relative;z-index:1;display:flex;align-items:flex-end;gap:28px;flex-wrap:wrap;}
+.profile-avatar-big{width:90px;height:90px;border-radius:50%;background:var(--teal);border:4px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;flex-shrink:0;}
+.profile-header-info h1{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:#fff;}
+.profile-header-info p{color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:4px;}
+.profile-header-badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.profile-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-size:0.73rem;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;}
+.profile-tabs-bar{background:var(--white);border-bottom:1px solid var(--border);padding:0 56px;display:flex;gap:0;}
+.profile-tab{padding:16px 20px;cursor:pointer;font-size:0.88rem;font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent;transition:var(--transition);background:none;border-top:none;border-left:none;border-right:none;font-family:'Outfit',sans-serif;}
+.profile-tab:hover{color:var(--navy);}
+.profile-tab.active{color:var(--navy);border-bottom-color:var(--teal);}
+.profile-content{max-width:900px;margin:0 auto;padding:36px 24px;}
+.profile-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px;box-shadow:var(--shadow);}
+.profile-section h3{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.booking-hist-card{background:var(--surface);border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;border:1px solid var(--border);transition:var(--transition);}
+.booking-hist-card:hover{border-color:var(--navy);background:var(--white);}
+.booking-hist-img{width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0;}
+.booking-hist-info{flex:1;}
+.booking-hist-name{font-weight:700;color:var(--navy);font-size:0.95rem;margin-bottom:3px;}
+.booking-hist-loc{color:var(--muted);font-size:0.8rem;margin-bottom:8px;}
+.booking-hist-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.booking-hist-meta span{font-size:0.78rem;color:var(--text2);}
+.wishlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.notification-item{display:flex;align-items:flex-start;gap:13px;padding:14px;border-radius:10px;background:var(--surface);margin-bottom:10px;border:1px solid var(--border);}
+.notif-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;}
+.notif-dot.read{background:var(--border);}
+.notif-text{font-size:0.87rem;color:var(--text2);line-height:1.5;}
+.notif-time{color:var(--muted);font-size:0.75rem;margin-top:4px;}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD SHARED
+═══════════════════════════════════════════ */
+.dash-layout{display:flex;min-height:100vh;padding-top:68px;}
+.sidebar{width:256px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:24px 14px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.sidebar-section-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);padding:16px 12px 8px;margin-top:4px;}
+.sidebar-section-label:first-child{padding-top:0;}
+.sidebar-link{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;color:var(--text2);font-size:0.875rem;font-weight:500;cursor:pointer;transition:var(--transition);border:none;background:none;width:100%;text-align:left;position:relative;}
+.sidebar-link:hover{background:var(--surface2);color:var(--navy);}
+.sidebar-link.active{background:rgba(26,39,68,0.07);color:var(--navy);font-weight:600;}
+.sidebar-link.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--teal);border-radius:0 3px 3px 0;}
+.sidebar-icon{width:18px;height:18px;flex-shrink:0;color:var(--muted);}
+.sidebar-link.active .sidebar-icon,.sidebar-link:hover .sidebar-icon{color:var(--navy);}
+.sidebar-badge{margin-left:auto;background:var(--coral);color:#fff;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:20px;line-height:1.6;}
+.dash-content{flex:1;padding:36px 44px;overflow-y:auto;background:var(--bg);}
+.dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px;}
+.dash-topbar h1{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:var(--navy);}
+.dash-topbar p{color:var(--muted);font-size:0.9rem;margin-top:3px;}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;margin-bottom:28px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:var(--transition);box-shadow:var(--shadow);}
+.stat-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.stat-card-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.stat-card-icon svg{width:18px;height:18px;}
+.sci-teal{background:var(--teal-pale);color:var(--teal);}
+.sci-navy{background:rgba(26,39,68,0.07);color:var(--navy);}
+.sci-coral{background:var(--coral-pale);color:var(--coral);}
+.sci-blue{background:var(--blue-pale);color:var(--blue);}
+.sci-gold{background:var(--gold-pale);color:var(--gold);}
+.stat-card-label{font-size:0.73rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;}
+.stat-card-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);line-height:1;}
+.stat-card-sub{color:var(--muted);font-size:0.78rem;margin-top:6px;}
+.stat-card-sub.up{color:var(--teal);}
+.stat-card-sub.down{color:var(--coral);}
+.dash-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.card-head{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.card-head h3{font-size:0.95rem;font-weight:700;color:var(--navy);}
+.card-head-sub{color:var(--muted);font-size:0.8rem;}
+.card-body{padding:22px 24px;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--surface);text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:11px 18px;}
+td{padding:14px 18px;border-top:1px solid var(--border);font-size:0.875rem;color:var(--text2);}
+tr:hover td{background:var(--surface);}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;padding:4px 11px;border-radius:20px;}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.pill-active{background:rgba(42,124,111,0.1);color:var(--teal);}
+.pill-active::before{background:var(--teal);}
+.pill-pending{background:var(--gold-pale);color:var(--gold);}
+.pill-pending::before{background:var(--gold);}
+.pill-inactive{background:var(--coral-pale);color:var(--coral);}
+.pill-inactive::before{background:var(--coral);}
+.pill-info{background:var(--blue-pale);color:var(--blue);}
+.pill-info::before{background:var(--blue);}
+.chart-area{background:var(--surface);border-radius:10px;height:190px;display:flex;align-items:flex-end;gap:8px;padding:16px 16px 0;overflow:hidden;}
+.chart-bar{flex:1;background:rgba(42,124,111,0.18);border-radius:5px 5px 0 0;transition:var(--transition);cursor:default;}
+.chart-bar:hover{background:rgba(42,124,111,0.45);}
+.chart-bar.highlight{background:rgba(26,39,68,0.5);}
+.prog-row{display:flex;flex-direction:column;gap:14px;}
+.prog-item{display:flex;flex-direction:column;gap:6px;}
+.prog-label{display:flex;justify-content:space-between;font-size:0.82rem;}
+.prog-label span:first-child{font-weight:500;color:var(--text2);}
+.prog-label span:last-child{color:var(--muted);font-weight:600;}
+.prog-bar{height:7px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;transition:width 0.8s ease;}
+.pf-navy{background:var(--navy);}
+.pf-teal{background:var(--teal);}
+.pf-blue{background:var(--blue);}
+.pf-coral{background:var(--coral);}
+.mini-list{display:flex;flex-direction:column;gap:10px;}
+.mini-item{display:flex;align-items:center;gap:13px;padding:13px 14px;background:var(--surface);border-radius:11px;font-size:0.86rem;border:1px solid transparent;transition:var(--transition);}
+.mini-item:hover{border-color:var(--border);background:var(--white);}
+.mini-ava{width:38px;height:38px;border-radius:12px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.88rem;flex-shrink:0;color:#fff;font-weight:700;}
+.mini-title{font-weight:600;color:var(--navy);margin-bottom:2px;}
+.mini-sub{color:var(--muted);font-size:0.78rem;}
+.ml-auto{margin-left:auto;}
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:var(--transition);color:var(--muted);}
+.upload-zone:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-pale);}
+.upload-zone svg{width:32px;height:32px;margin:0 auto 10px;display:block;opacity:0.5;}
+.toggle-chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:8px 16px;cursor:pointer;font-size:0.84rem;font-weight:500;color:var(--muted);transition:var(--transition);}
+.toggle-chip.on{border-color:var(--teal);color:var(--teal);background:var(--teal-pale);}
+.search-input{background:var(--surface);border:1.5px solid var(--border);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;padding:8px 14px;font-size:0.85rem;outline:none;transition:var(--transition);}
+.search-input:focus{border-color:var(--teal);}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* Toast notification */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--navy);color:#fff;padding:14px 22px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:var(--shadow-xl);z-index:9999;transform:translateY(20px);opacity:0;transition:all 0.3s ease;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.teal{background:var(--teal);}
+
+/* Responsive */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-center{display:none;}
+  section{padding:48px 20px;}
+  .search-box{grid-template-columns:1fr;}
+  .cta-band{margin:0 20px 60px;padding:40px 24px;}
+  .dash-grid-2{grid-template-columns:1fr;}
+  .form-grid-2{grid-template-columns:1fr;}
+  .sidebar{width:58px;padding:16px 8px;}
+  .sidebar-link span:not(.sidebar-icon){display:none;}
+  .sidebar-section-label{display:none;}
+  .sidebar-badge{display:none;}
+  .checkout-grid{grid-template-columns:1fr;}
+  .detail-content{grid-template-columns:1fr;}
+  .auth-left{display:none;}
+  .auth-right{flex:1;padding:48px 28px;}
+  footer{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════ -->
+<nav id="main-nav">
+  <div class="logo" onclick="showPage('home')">PG<em>Finder</em></div>
+  <div class="nav-center">
+    <button class="nav-link active" onclick="showPage('home');setActive(this)">Home</button>
+    <button class="nav-link" onclick="showPage('listings');setActive(this)">Browse PGs</button>
+    <button class="nav-link" onclick="showPage('landlord');setActive(this)">For Landlords</button>
+    <button class="nav-link" onclick="showPage('admin');setActive(this)">Admin</button>
+  </div>
+  <div class="nav-right" id="nav-guest">
+    <button class="nav-login" onclick="showPage('login')">Log In</button>
+    <button class="nav-cta" onclick="showPage('signup')">Sign Up Free</button>
+  </div>
+  <div class="nav-right hidden" id="nav-user">
+    <button class="nav-link" onclick="showPage('listings')">Browse</button>
+    <button class="nav-avatar" onclick="showPage('profile')" title="My Profile">P</button>
+  </div>
+</nav>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge"><span class="badge-dot"></span>India's Smartest PG Platform</div>
+    <h1>Find Your <i>Perfect</i><br/>Paying Guest Stay</h1>
+    <p class="hero-sub">Browse thousands of verified PG accommodations. Book securely, move in confidently.</p>
+    <div class="search-box">
+      <div class="search-field"><label>Location</label><input type="text" placeholder="e.g. Koramangala, Bengaluru"/></div>
+      <div class="search-field"><label>Room Type</label><select><option>Any Type</option><option>Single Occupancy</option><option>Double Occupancy</option><option>Triple Occupancy</option></select></div>
+      <div class="search-field"><label>Budget / Month</label><select><option>Any Budget</option><option>Under ₹5,000</option><option>₹5k – ₹10k</option><option>₹10k – ₹20k</option><option>₹20k+</option></select></div>
+      <button class="btn-search" onclick="showPage('listings')">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
+        Search
+      </button>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">12,400+</div><div class="stat-label">Listed Properties</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">48,000+</div><div class="stat-label">Happy Tenants</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">320+</div><div class="stat-label">Cities Covered</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Verified Listings</div></div>
+    </div>
+  </div>
+
+  <!-- Featured -->
+  <section>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:0;">
+      <div>
+        <div class="section-label">Featured Properties</div>
+        <div class="section-title">Handpicked Stays<br/>Near You</div>
+        <p class="section-sub">Every listing is verified, every review is real.</p>
+      </div>
+      <button class="btn btn-ghost" onclick="showPage('listings')">View All Properties →</button>
+    </div>
+    <div class="prop-grid">
+      <div class="prop-card" onclick="showPage('detail')">
+        <div class="prop-img" style="background:linear-gradient(145deg,#e8f5f3,#c8e8e3);">
+          <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&q=75" alt="Sunrise PG" onerror="this.style.display='none'"/>
+          <div class="prop-badge badge-verified">Verified</div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-name">Sunrise PG for Girls</div>
+          <div class="prop-loc"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Koramangala, Bengaluru</div>
+          <div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Meals</span><span class="tag">Laundry</span><span class="tag">AC</span></div>
+          <div class="prop-footer"><div class="prop-price">₹7,500 <span>/month</span></div><div class="prop-rating">★ 4.8 <span style="color:var(--muted);font-weight:400">(42)</span></div></div>
+        </div>
+      </div>
+      <div class="prop-card" onclick="showPage('detail')">
+        <div class="prop-img">
+          <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=75" alt="Urban Nest" onerror="this.style.display='none'"/>
+          <div class="prop-badge badge-top">Top Rated</div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-name">Urban Nest Co-Living</div>
+          <div class="prop-loc"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Baner, Pune</div>
+          <div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Gym</span><span class="tag">Parking</span></div>
+          <div class="prop-footer"><div class="prop-price">₹9,200 <span>/month</span></div><div class="prop-rating">★ 4.9 <span style="color:var(--muted);font-weight:400">(78)</span></div></div>
+        </div>
+      </div>
+      <div class="prop-card" onclick="showPage('detail')">
+        <div class="prop-img">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=75" alt="Comfort Stay" onerror="this.style.display='none'"/>
+          <div class="prop-badge badge-new">New</div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-name">Comfort Stay PG</div>
+          <div class="prop-loc"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Andheri West, Mumbai</div>
+          <div class="prop-tags"><span class="tag">Meals</span><span class="tag">CCTV</span><span class="tag">Single Room</span></div>
+          <div class="prop-footer"><div class="prop-price">₹11,000 <span>/month</span></div><div class="prop-rating">★ 4.6 <span style="color:var(--muted);font-weight:400">(19)</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section style="padding-top:0;background:var(--white);margin:0;padding-left:56px;padding-right:56px;padding-bottom:96px;">
+    <div class="section-label">Why PGFinder?</div>
+    <div class="section-title">Everything You Need,<br/>Nothing You Don't</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="feat-title">Advanced Filters</div><div class="feat-desc">Filter by location, budget, amenities, room type and more to find the perfect match.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(26,39,68,0.07);color:var(--navy);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg></div><div class="feat-title">Verified Listings</div><div class="feat-desc">Every property is physically verified before going live. Zero fake listings.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--gold-pale);color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="feat-title">Secure Booking</div><div class="feat-desc">Pay safely online. Receipts generated instantly. Refund policy backed in.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--blue-pale);color:var(--blue);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="feat-title">Direct Messaging</div><div class="feat-desc">Chat with landlords before booking. No middlemen, no hidden fees.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--gold-pale);color:var(--gold);"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="feat-title">Honest Reviews</div><div class="feat-desc">Real ratings from real tenants. Make decisions backed by verified feedback.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:var(--coral-pale);color:var(--coral);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></div><div class="feat-title">Map Search</div><div class="feat-desc">Visually explore neighbourhoods and find PGs closest to your workplace or college.</div></div>
+    </div>
+  </section>
+
+  <div style="height:80px;background:var(--white);"></div>
+  <div class="cta-band">
+    <div><h2>Are You a Landlord?</h2><p>List your property for free and reach thousands of verified tenants today.</p></div>
+    <button class="btn-cta-outline" onclick="showPage('landlord')">Go to Landlord Dashboard →</button>
+  </div>
+
+  <footer>
+    <div class="footer-brand"><div class="logo">PG<em>Finder</em></div><p>India's most trusted platform for finding and booking verified paying guest accommodations.</p></div>
+    <div class="footer-col"><h4>Tenants</h4><a href="#">Browse PGs</a><a href="#">How it works</a><a href="#">Reviews</a><a href="#">Map Search</a></div>
+    <div class="footer-col"><h4>Landlords</h4><a href="#">List Property</a><a href="#">Pricing</a><a href="#">Resources</a><a href="#">Support</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Privacy & Terms</a></div>
+  </footer>
+  <div class="footer-bottom"><div>© 2025 PGFinder. All rights reserved.</div><div style="display:flex;gap:20px;"><a href="#" style="color:var(--muted);text-decoration:none;">Privacy</a><a href="#" style="color:var(--muted);text-decoration:none;">Terms</a><a href="#" style="color:var(--muted);text-decoration:none;">Support</a></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: LOGIN
+══════════════════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="auth-page" style="padding-top:68px;min-height:calc(100vh - 68px);">
+    <div class="auth-left">
+      <div class="auth-left-content">
+        <div class="logo" style="font-size:1.4rem;margin-bottom:32px;">PG<em>Finder</em></div>
+        <h2>Welcome<br/><i>back.</i></h2>
+        <p>Thousands of verified PGs waiting for you. Log in and continue your search.</p>
+        <div class="auth-testimonial">
+          <p>"Found my perfect PG within 2 days. The booking process was seamless and the landlord was great!"</p>
+          <div class="auth-testimonial-author">
+            <div class="auth-testimonial-ava">P</div>
+            <div><div class="auth-testimonial-name">Priya Sharma</div><div class="auth-testimonial-role">Tenant · Bengaluru</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <h1>Log In</h1>
+      <p class="auth-sub">Don't have an account? <a onclick="showPage('signup')">Sign up free →</a></p>
+      <button class="social-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="form-divider">or continue with email</div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="priya@email.com"/></div>
+      <div class="form-group has-icon"><label>Password</label><input type="password" placeholder="Your password" id="login-pwd"/>
+        <span class="input-icon" onclick="togglePwd('login-pwd')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      </div>
+      <div class="remember-row">
+        <label><input type="checkbox" checked/> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <button class="btn-full" onclick="doLogin()">Log In →</button>
+      <div class="auth-switch">Don't have an account? <a onclick="showPage('signup')">Create one</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: SIGNUP
+══════════════════════════════════════════════ -->
+<div class="page" id="page-signup">
+  <div class="auth-page" style="padding-top:68px;min-height:calc(100vh - 68px);">
+    <div class="auth-left">
+      <div class="auth-left-content">
+        <div class="logo" style="font-size:1.4rem;margin-bottom:32px;">PG<em>Finder</em></div>
+        <h2>Your perfect<br/><i>home</i> awaits.</h2>
+        <p>Join 48,000+ happy tenants who found their ideal PG through PGFinder. Quick, safe, and reliable.</p>
+        <div class="auth-testimonial">
+          <p>"Listed my property on PGFinder and got my first tenant within a week. Amazing platform for landlords!"</p>
+          <div class="auth-testimonial-author">
+            <div class="auth-testimonial-ava" style="background:var(--gold);">R</div>
+            <div><div class="auth-testimonial-name">Ramesh Kumar</div><div class="auth-testimonial-role">Landlord · 4 Properties</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right" style="overflow-y:auto;max-height:calc(100vh - 68px);">
+      <h1>Create Account</h1>
+      <p class="auth-sub">Already have an account? <a onclick="showPage('login')">Log in →</a></p>
+      <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;">I am a</p>
+      <div class="role-selector">
+        <div class="role-card selected" id="role-tenant" onclick="selectRole('tenant')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Tenant</span>
+        </div>
+        <div class="role-card" id="role-landlord" onclick="selectRole('landlord')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          <span>Landlord</span>
+        </div>
+      </div>
+      <button class="social-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign up with Google
+      </button>
+      <div class="form-divider">or create with email</div>
+      <div class="form-grid-2">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Priya"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Sharma"/></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="priya@email.com"/></div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"/></div>
+      <div class="form-group has-icon"><label>Create Password</label><input type="password" placeholder="Min 8 characters" id="signup-pwd" oninput="checkPwdStrength(this.value)"/>
+        <span class="input-icon" onclick="togglePwd('signup-pwd')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      </div>
+      <div class="pwd-strength">
+        <div class="pwd-bars"><div class="pwd-bar" id="pb1"></div><div class="pwd-bar" id="pb2"></div><div class="pwd-bar" id="pb3"></div></div>
+        <div class="pwd-label" id="pwd-lbl">Enter a password</div>
+      </div>
+      <div style="margin-top:16px;margin-bottom:4px;">
+        <label style="display:flex;align-items:flex-start;gap:9px;font-size:0.83rem;color:var(--text2);cursor:pointer;line-height:1.5;"><input type="checkbox" style="margin-top:3px;accent-color:var(--teal);"/> I agree to PGFinder's <a href="#" style="color:var(--teal);font-weight:600;">Terms of Service</a> and <a href="#" style="color:var(--teal);font-weight:600;">Privacy Policy</a></label>
+      </div>
+      <button class="btn-full teal" style="margin-top:20px;" onclick="doSignup()">Create Account →</button>
+      <div class="auth-switch">Already have an account? <a onclick="showPage('login')">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: LISTINGS / BROWSE
+══════════════════════════════════════════════ -->
+<div class="page" id="page-listings">
+  <div class="browse-layout">
+    <aside class="filter-sidebar">
+      <h3>Filters <span onclick="showToast('Filters cleared','teal')">Clear all</span></h3>
+      <div class="filter-group">
+        <span class="filter-label">City</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox" checked/> Bengaluru <span style="margin-left:auto;color:var(--muted);font-size:0.75rem;">4,200</span></label>
+          <label class="filter-check"><input type="checkbox"/> Pune <span style="margin-left:auto;color:var(--muted);font-size:0.75rem;">2,800</span></label>
+          <label class="filter-check"><input type="checkbox"/> Mumbai <span style="margin-left:auto;color:var(--muted);font-size:0.75rem;">3,100</span></label>
+          <label class="filter-check"><input type="checkbox"/> Hyderabad <span style="margin-left:auto;color:var(--muted);font-size:0.75rem;">1,900</span></label>
+          <label class="filter-check"><input type="checkbox"/> Chennai <span style="margin-left:auto;color:var(--muted);font-size:0.75rem;">1,400</span></label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Budget Range (₹/month)</span>
+        <div class="range-inputs"><input type="number" placeholder="Min" value="4000"/><span class="range-sep">–</span><input type="number" placeholder="Max" value="20000"/></div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Room Type</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox" checked/> Single Occupancy</label>
+          <label class="filter-check"><input type="checkbox" checked/> Double Occupancy</label>
+          <label class="filter-check"><input type="checkbox"/> Triple Occupancy</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Gender</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox"/> Girls Only</label>
+          <label class="filter-check"><input type="checkbox"/> Boys Only</label>
+          <label class="filter-check"><input type="checkbox" checked/> Co-ed</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Amenities</span>
+        <div class="amenity-chips">
+          <div class="amenity-chip sel" onclick="this.classList.toggle('sel')">Wi-Fi</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">Meals</div>
+          <div class="amenity-chip sel" onclick="this.classList.toggle('sel')">Laundry</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">AC</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">CCTV</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">Gym</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">Parking</div>
+          <div class="amenity-chip" onclick="this.classList.toggle('sel')">Attached Bath</div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Min Rating</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="radio" name="rating"/> ★ 4.5+</label>
+          <label class="filter-check"><input type="radio" name="rating" checked/> ★ 4.0+</label>
+          <label class="filter-check"><input type="radio" name="rating"/> ★ 3.5+</label>
+        </div>
+      </div>
+      <button class="btn-full teal" onclick="showToast('Filters applied!','teal')">Apply Filters</button>
+    </aside>
+    <div class="listings-main">
+      <div class="listings-topbar">
+        <div><h2>PGs in Bengaluru</h2><p>Showing 248 verified properties</p></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <select class="sort-select"><option>Sort: Relevance</option><option>Price: Low to High</option><option>Price: High to Low</option><option>Rating</option><option>Newest</option></select>
+          <button class="btn btn-ghost btn-sm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="listings-grid">
+        <!-- Cards -->
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img"><img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=500&q=70" alt="" onerror="this.style.display='none'"/><div class="prop-badge badge-verified">Verified</div></div><div class="prop-body"><div class="prop-name">Sunrise PG for Girls</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Koramangala, Bengaluru</div><div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Meals</span><span class="tag">AC</span></div><div class="prop-footer"><div class="prop-price">₹7,500 <span>/month</span></div><div class="prop-rating">★ 4.8</div></div></div></div>
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&q=70" alt="" onerror="this.style.display='none'"/><div class="prop-badge badge-top">Top Rated</div></div><div class="prop-body"><div class="prop-name">Urban Nest Co-Living</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Indiranagar, Bengaluru</div><div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Gym</span></div><div class="prop-footer"><div class="prop-price">₹9,200 <span>/month</span></div><div class="prop-rating">★ 4.9</div></div></div></div>
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=70" alt="" onerror="this.style.display='none'"/><div class="prop-badge badge-new">New</div></div><div class="prop-body"><div class="prop-name">Green Heights PG</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>HSR Layout, Bengaluru</div><div class="prop-tags"><span class="tag">Meals</span><span class="tag">Laundry</span></div><div class="prop-footer"><div class="prop-price">₹6,500 <span>/month</span></div><div class="prop-rating">★ 4.5</div></div></div></div>
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img" style="background:linear-gradient(135deg,#eef2fb,#d4e0f8);display:flex;align-items:center;justify-content:center;"><svg width="60" height="60" viewBox="0 0 64 64" fill="none" opacity="0.3"><rect x="8" y="20" width="48" height="36" rx="3" stroke="#3b6bcc" stroke-width="2.5" fill="#3b6bcc" fill-opacity="0.12"/></svg><div class="prop-badge badge-verified">Verified</div></div><div class="prop-body"><div class="prop-name">Skyline Boys PG</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Whitefield, Bengaluru</div><div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Parking</span><span class="tag">CCTV</span></div><div class="prop-footer"><div class="prop-price">₹8,000 <span>/month</span></div><div class="prop-rating">★ 4.7</div></div></div></div>
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img" style="background:linear-gradient(135deg,#fdf6e8,#f5e4c0);display:flex;align-items:center;justify-content:center;"><svg width="60" height="60" viewBox="0 0 64 64" fill="none" opacity="0.3"><path d="M10 28L32 14l22 14" stroke="#c8922a" stroke-width="2.5"/><rect x="12" y="24" width="40" height="28" rx="3" stroke="#c8922a" stroke-width="2.5" fill="#c8922a" fill-opacity="0.12"/></svg></div><div class="prop-body"><div class="prop-name">Lotus Garden PG</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>JP Nagar, Bengaluru</div><div class="prop-tags"><span class="tag">Meals</span><span class="tag">AC</span></div><div class="prop-footer"><div class="prop-price">₹7,000 <span>/month</span></div><div class="prop-rating">★ 4.6</div></div></div></div>
+        <div class="prop-card" onclick="showPage('detail')"><div class="prop-img" style="background:linear-gradient(135deg,#e8f5f3,#c8e8e3);display:flex;align-items:center;justify-content:center;"><svg width="60" height="60" viewBox="0 0 64 64" fill="none" opacity="0.3"><path d="M10 32L32 14l22 18v20H10V32z" stroke="#2a7c6f" stroke-width="2.5" fill="#2a7c6f" fill-opacity="0.15"/></svg></div><div class="prop-body"><div class="prop-name">Tranquil Stay Homes</div><div class="prop-loc"><svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Marathahalli, Bengaluru</div><div class="prop-tags"><span class="tag">Wi-Fi</span><span class="tag">Gym</span><span class="tag">Meals</span></div><div class="prop-footer"><div class="prop-price">₹10,500 <span>/month</span></div><div class="prop-rating">★ 4.8</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: PROPERTY DETAIL
+══════════════════════════════════════════════ -->
+<div class="page" id="page-detail">
+  <div class="detail-page">
+    <div class="detail-hero">
+      <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=1400&q=80" alt="Sunrise PG" style="width:100%;height:100%;object-fit:cover;"/>
+      <div class="detail-hero-overlay"></div>
+      <div class="detail-hero-badges"><span class="prop-badge badge-verified" style="position:static;">Verified</span><span class="prop-badge badge-top" style="position:static;">Top Rated</span></div>
+      <button class="btn btn-ghost detail-back" onclick="showPage('listings')">← Back to listings</button>
+    </div>
+    <div class="detail-content">
+      <div class="detail-main">
+        <div class="detail-name">Sunrise PG for Girls</div>
+        <div class="detail-loc"><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9z"/><circle cx="10" cy="9" r="2" fill="white"/></svg>Koramangala 5th Block, Bengaluru, Karnataka 560095</div>
+        <div class="detail-rating-row">
+          <div class="detail-rating-item"><div class="val" style="color:var(--gold);">★ 4.8</div><div class="lbl">Rating</div></div>
+          <div style="width:1px;background:var(--border);margin:0 8px;"></div>
+          <div class="detail-rating-item"><div class="val">42</div><div class="lbl">Reviews</div></div>
+          <div style="width:1px;background:var(--border);margin:0 8px;"></div>
+          <div class="detail-rating-item"><div class="val">12</div><div class="lbl">Rooms</div></div>
+          <div style="width:1px;background:var(--border);margin:0 8px;"></div>
+          <div class="detail-rating-item"><div class="val">11</div><div class="lbl">Occupied</div></div>
+          <div style="width:1px;background:var(--border);margin:0 8px;"></div>
+          <div class="detail-rating-item"><div class="val" style="color:var(--teal);">Girls</div><div class="lbl">Gender</div></div>
+        </div>
+        <div class="detail-section-title">About this property</div>
+        <div class="detail-desc">Sunrise PG is a premium paying guest accommodation exclusively for women, located in the heart of Koramangala. The property offers fully furnished rooms with modern amenities in a safe and comfortable environment. Walking distance from major IT parks, cafes, and public transport.
+
+<br/><br/>We pride ourselves on maintaining a homely atmosphere with strict security protocols. Our 24/7 CCTV surveillance and trained staff ensure your safety at all times. The common areas include a well-equipped kitchen, lounge, and rooftop garden.
+        </div>
+        <div class="detail-section-title">Amenities</div>
+        <div class="detail-amenities">
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>High-Speed Wi-Fi (100 Mbps)</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>3 Meals per Day</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Laundry (twice a week)</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Air Conditioning</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>24/7 CCTV Security</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Attached Bathroom</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Power Backup</div>
+          <div class="detail-amenity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>24/7 Water Supply</div>
+        </div>
+        <div class="detail-section-title">Reviews</div>
+        <div class="detail-reviews">
+          <div class="review-card"><div class="review-header"><div class="review-ava">K</div><div><div class="review-name">Kavya Nair</div><div class="review-date">November 2025</div></div><div class="review-stars">★★★★★</div></div><div class="review-text">Absolutely love living here! The staff is very friendly, food is home-cooked and delicious. The location is perfect — 10 mins from my office. Would highly recommend to all working women.</div></div>
+          <div class="review-card"><div class="review-header"><div class="review-ava" style="background:var(--teal);">S</div><div><div class="review-name">Sneha Rao</div><div class="review-date">October 2025</div></div><div class="review-stars">★★★★★</div></div><div class="review-text">Clean, safe, and extremely well-maintained. The AC rooms are a blessing in Bengaluru summers. Management is very responsive to any issues.</div></div>
+        </div>
+      </div>
+      <!-- Booking Card -->
+      <div>
+        <div class="booking-card">
+          <div class="booking-card-price">₹7,500 <span>/month</span></div>
+          <p style="color:var(--teal);font-size:0.8rem;font-weight:600;margin-bottom:20px;">✓ 1 room available</p>
+          <div class="booking-form">
+            <div class="form-group"><label>Move-in Date</label><input type="date" value="2026-02-01"/></div>
+            <div class="form-group"><label>Duration</label><select><option>1 Month</option><option>3 Months</option><option selected>6 Months</option><option>12 Months</option></select></div>
+            <div class="form-group"><label>Room Type</label><select><option>Single Occupancy — ₹7,500</option><option>Double Occupancy — ₹5,500</option></select></div>
+          </div>
+          <div class="booking-summary">
+            <div class="booking-summary-row"><span>₹7,500 × 6 months</span><span>₹45,000</span></div>
+            <div class="booking-summary-row"><span>Security Deposit</span><span>₹15,000</span></div>
+            <div class="booking-summary-row"><span>Service Fee</span><span>₹500</span></div>
+            <div class="booking-summary-row"><span>Total</span><span>₹60,500</span></div>
+          </div>
+          <button class="btn-full teal" onclick="showPage('checkout')">Reserve Now →</button>
+          <button class="btn-full" style="background:var(--surface2);color:var(--navy);margin-top:10px;" onclick="showToast('Message sent to landlord!','teal')">Message Landlord</button>
+          <p style="text-align:center;color:var(--muted);font-size:0.76rem;margin-top:14px;">You won't be charged yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: CHECKOUT
+══════════════════════════════════════════════ -->
+<div class="page" id="page-checkout">
+  <div class="checkout-page">
+    <div class="checkout-wrap">
+      <div class="checkout-title">Checkout</div>
+      <div class="checkout-sub">Review your booking details and complete payment securely.</div>
+      <!-- Steps -->
+      <div class="checkout-steps">
+        <div class="checkout-step"><div class="step-circle done">✓</div><span class="step-label active">Property</span></div>
+        <div class="step-connector done"></div>
+        <div class="checkout-step"><div class="step-circle active">2</div><span class="step-label active">Details</span></div>
+        <div class="step-connector"></div>
+        <div class="checkout-step"><div class="step-circle pending">3</div><span class="step-label">Payment</span></div>
+        <div class="step-connector"></div>
+        <div class="checkout-step"><div class="step-circle pending">4</div><span class="step-label">Confirm</span></div>
+      </div>
+      <div class="checkout-grid">
+        <div>
+          <!-- Personal Info -->
+          <div class="checkout-card">
+            <h3>Personal Information</h3>
+            <div class="form-grid-2">
+              <div class="form-group"><label>First Name</label><input type="text" value="Priya"/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" value="Sharma"/></div>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" value="priya@email.com"/></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" value="+91 98765 43210"/></div>
+            <div class="form-group"><label>Current Address</label><textarea rows="2" placeholder="Your current address for verification..."></textarea></div>
+            <div class="form-group"><label>Government ID Type</label><select><option>Aadhaar Card</option><option>Passport</option><option>Voter ID</option><option>Driving License</option></select></div>
+            <div class="form-group"><label>ID Number</label><input type="text" placeholder="XXXX XXXX XXXX"/></div>
+          </div>
+          <!-- Payment -->
+          <div class="checkout-card">
+            <h3>Payment Method</h3>
+            <div class="payment-methods">
+              <div class="pay-method active" onclick="setPayMethod(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Card
+              </div>
+              <div class="pay-method" onclick="setPayMethod(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                UPI
+              </div>
+              <div class="pay-method" onclick="setPayMethod(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                Net Banking
+              </div>
+              <div class="pay-method" onclick="setPayMethod(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Wallet
+              </div>
+            </div>
+            <!-- Card Form -->
+            <div id="card-form">
+              <div class="form-group"><label>Card Number</label><input type="text" placeholder="1234  5678  9012  3456" maxlength="19"/></div>
+              <div class="card-input-row">
+                <div class="form-group"><label>Expiry Date</label><input type="text" placeholder="MM / YY"/></div>
+                <div class="form-group"><label>CVV</label><input type="text" placeholder="•••" maxlength="3"/></div>
+              </div>
+              <div class="form-group"><label>Name on Card</label><input type="text" placeholder="PRIYA SHARMA"/></div>
+            </div>
+            <!-- UPI Form -->
+            <div id="upi-form" style="display:none;">
+              <div class="form-group"><label>UPI ID</label><input type="text" placeholder="yourname@paytm or 9876543210@upi"/></div>
+              <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;">You'll receive a payment request on your UPI app.</p>
+            </div>
+            <div class="secure-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Your payment is secured with 256-bit SSL encryption. We never store your card details.
+            </div>
+          </div>
+          <button class="btn-full teal" onclick="showPage('payment-success')">Pay ₹60,500 Securely →</button>
+        </div>
+        <!-- Order Summary -->
+        <div>
+          <div class="order-summary-card">
+            <h3>Booking Summary</h3>
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70" class="order-prop-img" alt="Property"/>
+            <div class="order-prop-name">Sunrise PG for Girls</div>
+            <div class="order-prop-loc">📍 Koramangala, Bengaluru</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">
+              <div>Check-in: <strong style="color:var(--navy);">Feb 1, 2026</strong></div>
+              <div>Duration: <strong style="color:var(--navy);">6 months</strong></div>
+              <div>Room: <strong style="color:var(--navy);">Single Occupancy</strong></div>
+            </div>
+            <div class="order-line"><span>Monthly Rent × 6</span><span>₹45,000</span></div>
+            <div class="order-line"><span>Security Deposit</span><span>₹15,000</span></div>
+            <div class="order-line"><span>Service Fee</span><span>₹500</span></div>
+            <div class="order-line"><span>GST (18%)</span><span>₹0</span></div>
+            <div class="order-line"><span>Total Amount</span><span>₹60,500</span></div>
+            <div class="coupon-row">
+              <input type="text" placeholder="Coupon code"/>
+              <button class="btn btn-teal btn-sm" onclick="showToast('Coupon applied! ₹500 off','teal')">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: PAYMENT SUCCESS
+══════════════════════════════════════════════ -->
+<div class="page" id="page-payment-success">
+  <div style="padding-top:68px;min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;background:var(--bg);">
+    <div class="payment-success">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+      </div>
+      <h2>Booking Confirmed!</h2>
+      <p>Your PG booking at Sunrise PG for Girls has been confirmed. The landlord has been notified and will contact you within 24 hours.</p>
+      <div class="booking-ref"><span>Booking Reference</span><strong>PGF-2026-084721</strong></div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-navy" onclick="showPage('profile')">View My Bookings →</button>
+        <button class="btn btn-ghost" onclick="showPage('home')">Back to Home</button>
+        <button class="btn btn-ghost" onclick="showToast('Receipt sent to priya@email.com','teal')">Download Receipt</button>
+      </div>
+      <div style="margin-top:48px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:500px;margin-left:auto;margin-right:auto;">
+        <h4 style="font-family:'Fraunces',serif;color:var(--navy);margin-bottom:16px;">What happens next?</h4>
+        <div style="display:flex;flex-direction:column;gap:12px;text-align:left;">
+          <div style="display:flex;gap:12px;font-size:0.87rem;color:var(--text2);"><div style="width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;">1</div>Landlord contacts you within 24 hours to schedule a move-in visit.</div>
+          <div style="display:flex;gap:12px;font-size:0.87rem;color:var(--text2);"><div style="width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;">2</div>Submit your ID verification documents via the portal.</div>
+          <div style="display:flex;gap:12px;font-size:0.87rem;color:var(--text2);"><div style="width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;">3</div>Move in on your selected date. Welcome home!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: USER PROFILE
+══════════════════════════════════════════════ -->
+<div class="page" id="page-profile">
+  <div class="profile-layout">
+    <div class="profile-header">
+      <div class="profile-header-content">
+        <div class="profile-avatar-big">P</div>
+        <div class="profile-header-info">
+          <h1>Priya Sharma</h1>
+          <p>priya@email.com · +91 98765 43210 · Member since Oct 2025</p>
+          <div class="profile-header-badges">
+            <span class="profile-badge">✓ Verified</span>
+            <span class="profile-badge">Tenant</span>
+            <span class="profile-badge">Bengaluru</span>
+          </div>
+        </div>
+        <div style="margin-left:auto;">
+          <button class="btn btn-outline-navy" style="border-color:rgba(255,255,255,0.3);color:#fff;background:rgba(255,255,255,0.1);" onclick="showPage('home');showToast('Logged out successfully')">Log Out</button>
+        </div>
+      </div>
+    </div>
+    <div class="profile-tabs-bar">
+      <button class="profile-tab active" onclick="profileTab(this,'pt-bookings')">My Bookings</button>
+      <button class="profile-tab" onclick="profileTab(this,'pt-wishlist')">Wishlist</button>
+      <button class="profile-tab" onclick="profileTab(this,'pt-messages')">Messages <span style="background:var(--coral);color:#fff;font-size:0.65rem;padding:1px 7px;border-radius:20px;margin-left:4px;">3</span></button>
+      <button class="profile-tab" onclick="profileTab(this,'pt-notifications')">Notifications</button>
+      <button class="profile-tab" onclick="profileTab(this,'pt-settings')">Settings</button>
+    </div>
+    <div class="profile-content">
+      <!-- Bookings -->
+      <div id="pt-bookings">
+        <div class="profile-section">
+          <h3>Active Bookings</h3>
+          <div class="booking-hist-card">
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=160&q=70" class="booking-hist-img" alt=""/>
+            <div class="booking-hist-info">
+              <div class="booking-hist-name">Sunrise PG for Girls</div>
+              <div class="booking-hist-loc">📍 Koramangala, Bengaluru</div>
+              <div class="booking-hist-meta">
+                <span>📅 Feb 1 – Aug 1, 2026</span>
+                <span>🏠 Single Room</span>
+                <span>💰 ₹7,500/month</span>
+                <span class="pill pill-active">Active</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+              <button class="btn btn-ghost btn-sm">View Details</button>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('Receipt downloaded')">Receipt</button>
+            </div>
+          </div>
+        </div>
+        <div class="profile-section">
+          <h3>Past Bookings</h3>
+          <div class="booking-hist-card">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=160&q=70" class="booking-hist-img" alt=""/>
+            <div class="booking-hist-info">
+              <div class="booking-hist-name">Urban Nest Co-Living</div>
+              <div class="booking-hist-loc">📍 Baner, Pune</div>
+              <div class="booking-hist-meta">
+                <span>📅 May – Nov 2025</span>
+                <span>🏠 Double Room</span>
+                <span>💰 ₹5,500/month</span>
+                <span class="pill pill-inactive">Completed</span>
+              </div>
+            </div>
+            <div style="flex-shrink:0;">
+              <button class="btn btn-teal btn-sm" onclick="showToast('Review submitted! Thank you','teal')">Leave Review</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Wishlist -->
+      <div id="pt-wishlist" style="display:none;">
+        <div class="profile-section">
+          <h3>Saved Properties</h3>
+          <div class="wishlist-grid">
+            <div class="prop-card" onclick="showPage('detail')"><div class="prop-img"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=70" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/></div><div class="prop-body"><div class="prop-name" style="font-size:1rem;">Green Heights PG</div><div class="prop-loc">HSR Layout, Bengaluru</div><div class="prop-footer"><div class="prop-price">₹6,500 <span>/month</span></div><div class="prop-rating">★ 4.5</div></div></div></div>
+            <div class="prop-card" onclick="showPage('detail')"><div class="prop-img" style="background:linear-gradient(135deg,#eef2fb,#d4e0f8);display:flex;align-items:center;justify-content:center;height:150px;"></div><div class="prop-body"><div class="prop-name" style="font-size:1rem;">Skyline Boys PG</div><div class="prop-loc">Whitefield, Bengaluru</div><div class="prop-footer"><div class="prop-price">₹8,000 <span>/month</span></div><div class="prop-rating">★ 4.7</div></div></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Messages -->
+      <div id="pt-messages" style="display:none;">
+        <div class="profile-section">
+          <h3>Messages</h3>
+          <div class="mini-list">
+            <div class="mini-item"><div class="mini-ava">R</div><div><div class="mini-title">Ramesh Kumar — Sunrise PG</div><div class="mini-sub">Welcome! I've confirmed your booking. Please bring your original ID on move-in day.</div></div><div class="ml-auto"><button class="btn btn-navy btn-sm">Reply</button></div></div>
+            <div class="mini-item"><div class="mini-ava" style="background:var(--teal);">S</div><div><div class="mini-title">Support Team</div><div class="mini-sub">Your verification documents have been approved. ✓</div></div><div class="ml-auto"><button class="btn btn-ghost btn-sm">View</button></div></div>
+            <div class="mini-item"><div class="mini-ava" style="background:var(--gold);">M</div><div><div class="mini-title">Meena Iyer — Lakeside PG</div><div class="mini-sub">Hi! The room you enquired about is available from March 1.</div></div><div class="ml-auto"><button class="btn btn-navy btn-sm">Reply</button></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Notifications -->
+      <div id="pt-notifications" style="display:none;">
+        <div class="profile-section">
+          <h3>Notifications</h3>
+          <div class="notification-item"><div class="notif-dot"></div><div><div class="notif-text">Your booking at Sunrise PG has been <strong>confirmed</strong>. Booking ref: PGF-2026-084721</div><div class="notif-time">2 hours ago</div></div></div>
+          <div class="notification-item"><div class="notif-dot"></div><div><div class="notif-text">Payment of ₹60,500 received successfully.</div><div class="notif-time">2 hours ago</div></div></div>
+          <div class="notification-item"><div class="notif-dot read"></div><div><div class="notif-text">Lakeside PG has responded to your inquiry.</div><div class="notif-time">Yesterday</div></div></div>
+          <div class="notification-item"><div class="notif-dot read"></div><div><div class="notif-text">New properties matching your search in Koramangala.</div><div class="notif-time">2 days ago</div></div></div>
+        </div>
+      </div>
+      <!-- Settings -->
+      <div id="pt-settings" style="display:none;">
+        <div class="profile-section">
+          <h3>Personal Information</h3>
+          <div class="form-grid-2">
+            <div class="form-group"><label>First Name</label><input type="text" value="Priya"/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" value="Sharma"/></div>
+          </div>
+          <div class="form-group"><label>Email</label><input type="email" value="priya@email.com"/></div>
+          <div class="form-group"><label>Phone</label><input type="tel" value="+91 98765 43210"/></div>
+          <div class="form-group"><label>City</label><input type="text" value="Bengaluru"/></div>
+          <div class="form-group"><label>Bio</label><textarea rows="3" placeholder="Tell landlords a bit about yourself..."></textarea></div>
+          <button class="btn btn-teal" onclick="showToast('Profile updated!','teal')">Save Changes</button>
+        </div>
+        <div class="profile-section">
+          <h3>Security</h3>
+          <div class="form-group"><label>Current Password</label><input type="password" placeholder="••••••••"/></div>
+          <div class="form-grid-2">
+            <div class="form-group"><label>New Password</label><input type="password" placeholder="••••••••"/></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" placeholder="••••••••"/></div>
+          </div>
+          <button class="btn btn-ghost" onclick="showToast('Password changed successfully','teal')">Change Password</button>
+        </div>
+        <div class="profile-section">
+          <h3>Notification Preferences</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <label style="display:flex;align-items:center;justify-content:space-between;font-size:0.9rem;color:var(--text2);"><span>Booking confirmations</span><input type="checkbox" checked style="accent-color:var(--teal);width:18px;height:18px;"/></label>
+            <label style="display:flex;align-items:center;justify-content:space-between;font-size:0.9rem;color:var(--text2);"><span>New property alerts</span><input type="checkbox" checked style="accent-color:var(--teal);width:18px;height:18px;"/></label>
+            <label style="display:flex;align-items:center;justify-content:space-between;font-size:0.9rem;color:var(--text2);"><span>Messages from landlords</span><input type="checkbox" checked style="accent-color:var(--teal);width:18px;height:18px;"/></label>
+            <label style="display:flex;align-items:center;justify-content:space-between;font-size:0.9rem;color:var(--text2);"><span>Promotional emails</span><input type="checkbox" style="accent-color:var(--teal);width:18px;height:18px;"/></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: LANDLORD DASHBOARD
+══════════════════════════════════════════════ -->
+<div class="page" id="page-landlord">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section-label">Overview</div>
+      <button class="sidebar-link active" onclick="landlordTab(this,'ld-overview')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></button>
+      <button class="sidebar-link" onclick="landlordTab(this,'ld-properties')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span>My Properties</span></button>
+      <button class="sidebar-link" onclick="landlordTab(this,'ld-bookings')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Bookings</span><span class="sidebar-badge">3</span></button>
+      <div class="sidebar-section-label">Manage</div>
+      <button class="sidebar-link" onclick="landlordTab(this,'ld-add')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Add Property</span></button>
+      <button class="sidebar-link" onclick="landlordTab(this,'ld-messages')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Messages</span><span class="sidebar-badge">5</span></button>
+      <div class="sidebar-section-label">Finance</div>
+      <button class="sidebar-link" onclick="landlordTab(this,'ld-earnings')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Earnings</span></button>
+      <div class="sidebar-section-label">Account</div>
+      <button class="sidebar-link" onclick="showPage('home')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Log Out</span></button>
+    </aside>
+    <main class="dash-content">
+      <!-- Overview -->
+      <div id="ld-overview">
+        <div class="dash-topbar">
+          <div><h1>Good morning, Ramesh 👋</h1><p>Here's what's happening with your properties today.</p></div>
+          <button class="btn btn-navy btn-sm" onclick="landlordTab(document.querySelectorAll('#page-landlord .sidebar-link')[3],'ld-add')">+ Add Property</button>
+        </div>
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-card-icon sci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div class="stat-card-label">Total Properties</div><div class="stat-card-num">4</div><div class="stat-card-sub">2 active · 2 pending</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-card-label">Active Tenants</div><div class="stat-card-num">11</div><div class="stat-card-sub up">↑ 2 this month</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div class="stat-card-label">Pending Requests</div><div class="stat-card-num">3</div><div class="stat-card-sub">Awaiting review</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-card-label">Monthly Revenue</div><div class="stat-card-num" style="font-size:1.55rem;">₹82,500</div><div class="stat-card-sub up">↑ 12% vs last month</div></div>
+        </div>
+        <div class="dash-grid-2">
+          <div class="card"><div class="card-head"><h3>Monthly Earnings</h3><span class="card-head-sub">Last 8 months</span></div><div class="card-body"><div class="chart-area"><div class="chart-bar" style="height:55%"></div><div class="chart-bar" style="height:70%"></div><div class="chart-bar" style="height:60%"></div><div class="chart-bar" style="height:80%"></div><div class="chart-bar" style="height:65%"></div><div class="chart-bar" style="height:90%"></div><div class="chart-bar" style="height:75%"></div><div class="chart-bar highlight" style="height:100%"></div></div></div></div>
+          <div class="card"><div class="card-head"><h3>Occupancy Rate</h3></div><div class="card-body"><div class="prog-row"><div class="prog-item"><div class="prog-label"><span>Sunrise PG (Girls)</span><span>92%</span></div><div class="prog-bar"><div class="prog-fill pf-navy" style="width:92%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Urban Nest Block A</span><span>78%</span></div><div class="prog-bar"><div class="prog-fill pf-teal" style="width:78%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Comfort Stay PG</span><span>60%</span></div><div class="prog-bar"><div class="prog-fill pf-blue" style="width:60%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Green Villa PG</span><span>45%</span></div><div class="prog-bar"><div class="prog-fill pf-coral" style="width:45%"></div></div></div></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Recent Booking Requests</h3><button class="btn btn-ghost btn-sm" onclick="landlordTab(document.querySelectorAll('#page-landlord .sidebar-link')[2],'ld-bookings')">View All</button></div>
+          <table><thead><tr><th>Tenant</th><th>Property</th><th>Room</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody>
+            <tr><td><strong>Priya Sharma</strong></td><td>Sunrise PG</td><td>Double</td><td>Feb 1, 2026</td><td><span class="pill pill-pending">Pending</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('Booking accepted!','teal')">Accept</button><button class="btn btn-danger btn-sm">Decline</button></div></td></tr>
+            <tr><td><strong>Amit Verma</strong></td><td>Urban Nest</td><td>Single</td><td>Feb 5, 2026</td><td><span class="pill pill-pending">Pending</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('Booking accepted!','teal')">Accept</button><button class="btn btn-danger btn-sm">Decline</button></div></td></tr>
+            <tr><td><strong>Neha Gupta</strong></td><td>Comfort Stay</td><td>Triple</td><td>Feb 8, 2026</td><td><span class="pill pill-active">Confirmed</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Details</button></div></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <!-- Properties -->
+      <div id="ld-properties" style="display:none">
+        <div class="dash-topbar"><div><h1>My Properties</h1><p>Manage your listed PG accommodations.</p></div><button class="btn btn-navy btn-sm" onclick="landlordTab(document.querySelectorAll('#page-landlord .sidebar-link')[3],'ld-add')">+ Add New Property</button></div>
+        <div class="card"><table><thead><tr><th>Property Name</th><th>Location</th><th>Rooms</th><th>Occupancy</th><th>Rent</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td><strong>Sunrise PG</strong></td><td>Koramangala</td><td>12</td><td>11/12</td><td>₹7,500</td><td><span class="pill pill-active">Active</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Edit</button><button class="btn btn-danger btn-sm">Pause</button></div></td></tr>
+          <tr><td><strong>Urban Nest Block A</strong></td><td>Baner, Pune</td><td>8</td><td>5/8</td><td>₹9,200</td><td><span class="pill pill-active">Active</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Edit</button><button class="btn btn-danger btn-sm">Pause</button></div></td></tr>
+          <tr><td><strong>Comfort Stay PG</strong></td><td>Andheri, Mumbai</td><td>6</td><td>3/6</td><td>₹11,000</td><td><span class="pill pill-pending">Pending Review</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Edit</button></div></td></tr>
+          <tr><td><strong>Green Villa PG</strong></td><td>Whitefield, Bengaluru</td><td>10</td><td>4/10</td><td>₹6,500</td><td><span class="pill pill-inactive">Paused</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('Property activated!','teal')">Activate</button><button class="btn btn-ghost btn-sm">Edit</button></div></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Bookings -->
+      <div id="ld-bookings" style="display:none">
+        <div class="dash-topbar"><div><h1>Bookings</h1><p>Track all tenant booking requests and confirmed stays.</p></div></div>
+        <div class="card"><table><thead><tr><th>Tenant</th><th>Property</th><th>Check-In</th><th>Duration</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody>
+          <tr><td><strong>Priya Sharma</strong></td><td>Sunrise PG</td><td>Feb 1, 2026</td><td>6 months</td><td>₹45,000</td><td><span class="pill pill-pending">Pending</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('Accepted!','teal')">Accept</button><button class="btn btn-danger btn-sm">Decline</button></div></td></tr>
+          <tr><td><strong>Rohan Mehta</strong></td><td>Urban Nest</td><td>Jan 5, 2026</td><td>3 months</td><td>₹27,600</td><td><span class="pill pill-active">Confirmed</span></td><td><button class="btn btn-ghost btn-sm">Receipt</button></td></tr>
+          <tr><td><strong>Kavya Nair</strong></td><td>Sunrise PG</td><td>Dec 1, 2025</td><td>12 months</td><td>₹90,000</td><td><span class="pill pill-active">Active Stay</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+          <tr><td><strong>Ankit Joshi</strong></td><td>Comfort Stay</td><td>Nov 1, 2025</td><td>3 months</td><td>₹33,000</td><td><span class="pill pill-inactive">Completed</span></td><td><button class="btn btn-ghost btn-sm">Review</button></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Add Property -->
+      <div id="ld-add" style="display:none">
+        <div class="dash-topbar"><div><h1>Add New Property</h1><p>Fill in the details to list your PG on the platform.</p></div></div>
+        <div class="card"><div class="card-body">
+          <div class="form-grid-2">
+            <div class="form-group" style="grid-column:1/-1"><label>Property Name</label><input type="text" placeholder="e.g. Sunrise PG for Girls"/></div>
+            <div class="form-group"><label>City</label><input type="text" placeholder="Bengaluru"/></div>
+            <div class="form-group"><label>Area / Locality</label><input type="text" placeholder="Koramangala 5th Block"/></div>
+            <div class="form-group" style="grid-column:1/-1"><label>Full Address</label><textarea rows="2" placeholder="Building no, street, landmark..."></textarea></div>
+            <div class="form-group"><label>Monthly Rent (₹)</label><input type="number" placeholder="7500"/></div>
+            <div class="form-group"><label>Security Deposit (₹)</label><input type="number" placeholder="15000"/></div>
+            <div class="form-group"><label>Room Types Available</label><select><option>Single</option><option>Double</option><option>Triple</option><option>Multiple</option></select></div>
+            <div class="form-group"><label>Total Rooms</label><input type="number" placeholder="10"/></div>
+            <div class="form-group" style="grid-column:1/-1"><label>Amenities</label>
+              <div class="amenity-chips" style="margin-top:8px;">
+                <div class="amenity-chip sel" onclick="this.classList.toggle('sel')">Wi-Fi</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">Meals</div>
+                <div class="amenity-chip sel" onclick="this.classList.toggle('sel')">Laundry</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">AC</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">CCTV</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">Gym</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">Parking</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">Attached Bath</div>
+                <div class="amenity-chip" onclick="this.classList.toggle('sel')">24/7 Access</div>
+              </div>
+            </div>
+            <div class="form-group" style="grid-column:1/-1"><label>Property Photos</label>
+              <div class="upload-zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg><div style="font-weight:500;">Click to upload or drag & drop</div><div style="font-size:.75rem;margin-top:5px;color:var(--muted);">PNG, JPG up to 10MB each</div></div>
+            </div>
+            <div class="form-group" style="grid-column:1/-1"><label>Description</label><textarea rows="4" placeholder="Tell tenants about your property, rules, nearby areas..."></textarea></div>
+            <div class="form-group" style="grid-column:1/-1">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Availability</span>
+                <div class="toggle-chip on" onclick="this.classList.toggle('on')">Available Now</div>
+                <div class="toggle-chip" onclick="this.classList.toggle('on')">Girls Only</div>
+                <div class="toggle-chip" onclick="this.classList.toggle('on')">Boys Only</div>
+                <div class="toggle-chip" onclick="this.classList.toggle('on')">Meals Included</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-full teal" onclick="showToast('Property listed! Under review.','teal')">Publish Listing →</button>
+        </div></div>
+      </div>
+      <!-- Messages -->
+      <div id="ld-messages" style="display:none">
+        <div class="dash-topbar"><div><h1>Messages</h1><p>Inquiries from potential tenants.</p></div></div>
+        <div class="card"><div class="card-body"><div class="mini-list">
+          <div class="mini-item"><div class="mini-ava">P</div><div><div class="mini-title">Priya Sharma</div><div class="mini-sub">Hi, is the double room still available for February?</div></div><div class="ml-auto"><button class="btn btn-navy btn-sm">Reply</button></div></div>
+          <div class="mini-item"><div class="mini-ava" style="background:var(--teal);">R</div><div><div class="mini-title">Rohit Das</div><div class="mini-sub">Do you allow cooking in the room?</div></div><div class="ml-auto"><button class="btn btn-navy btn-sm">Reply</button></div></div>
+          <div class="mini-item"><div class="mini-ava" style="background:var(--gold);">S</div><div><div class="mini-title">Sanya Kapoor</div><div class="mini-sub">What are the visiting hours policy?</div></div><div class="ml-auto"><button class="btn btn-navy btn-sm">Reply</button></div></div>
+          <div class="mini-item"><div class="mini-ava">A</div><div><div class="mini-title">Arjun Pillai</div><div class="mini-sub">Can I see the property this weekend?</div></div><div class="ml-auto"><button class="btn btn-ghost btn-sm">Replied ✓</button></div></div>
+        </div></div></div>
+      </div>
+      <!-- Earnings -->
+      <div id="ld-earnings" style="display:none">
+        <div class="dash-topbar"><div><h1>Earnings</h1><p>Track your rental income across all properties.</p></div><button class="btn btn-ghost btn-sm">Export CSV</button></div>
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-card-icon sci-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-card-label">This Month</div><div class="stat-card-num" style="font-size:1.5rem;">₹82,500</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg></div><div class="stat-card-label">Last Month</div><div class="stat-card-num" style="font-size:1.5rem;">₹73,800</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card-label">Total 2025</div><div class="stat-card-num" style="font-size:1.5rem;">₹7.42L</div><div class="stat-card-sub up">Strong year</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div><div class="stat-card-label">Pending Payout</div><div class="stat-card-num" style="font-size:1.5rem;">₹18,200</div></div>
+        </div>
+        <div class="card"><div class="card-head"><h3>Transaction History</h3></div><table><thead><tr><th>Date</th><th>Tenant</th><th>Property</th><th>Amount</th><th>Type</th><th>Status</th></tr></thead><tbody>
+          <tr><td>Dec 1, 2025</td><td><strong>Kavya Nair</strong></td><td>Sunrise PG</td><td>₹7,500</td><td>Monthly Rent</td><td><span class="pill pill-active">Received</span></td></tr>
+          <tr><td>Dec 5, 2025</td><td><strong>Rohan Mehta</strong></td><td>Urban Nest</td><td>₹9,200</td><td>Monthly Rent</td><td><span class="pill pill-active">Received</span></td></tr>
+          <tr><td>Dec 10, 2025</td><td><strong>Ankit Joshi</strong></td><td>Comfort Stay</td><td>₹11,000</td><td>Monthly Rent</td><td><span class="pill pill-pending">Pending</span></td></tr>
+          <tr><td>Nov 28, 2025</td><td><strong>Priya Sharma</strong></td><td>Sunrise PG</td><td>₹15,000</td><td>Security Deposit</td><td><span class="pill pill-active">Received</span></td></tr>
+        </tbody></table></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: ADMIN DASHBOARD
+══════════════════════════════════════════════ -->
+<div class="page" id="page-admin">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section-label">Overview</div>
+      <button class="sidebar-link active" onclick="adminTab(this,'ad-overview')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></button>
+      <button class="sidebar-link" onclick="adminTab(this,'ad-users')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span>Users</span></button>
+      <button class="sidebar-link" onclick="adminTab(this,'ad-listings')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Listings</span><span class="sidebar-badge">7</span></button>
+      <div class="sidebar-section-label">Moderation</div>
+      <button class="sidebar-link" onclick="adminTab(this,'ad-disputes')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Disputes</span><span class="sidebar-badge">4</span></button>
+      <button class="sidebar-link" onclick="adminTab(this,'ad-reports')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Reports</span></button>
+      <div class="sidebar-section-label">System</div>
+      <button class="sidebar-link"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span>Notifications</span><span class="sidebar-badge">2</span></button>
+      <button class="sidebar-link" onclick="showPage('home')"><svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Log Out</span></button>
+    </aside>
+    <main class="dash-content">
+      <!-- Admin Overview -->
+      <div id="ad-overview">
+        <div class="dash-topbar"><div><h1>Admin Dashboard</h1><p>Platform-wide overview and quick actions.</p></div><button class="btn btn-navy btn-sm">Export Report</button></div>
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-card-icon sci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-card-label">Total Users</div><div class="stat-card-num">48,240</div><div class="stat-card-sub up">↑ 1,204 this month</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div class="stat-card-label">Active Listings</div><div class="stat-card-num">12,400</div><div class="stat-card-sub">340 pending verify</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-card-label">Bookings Today</div><div class="stat-card-num">87</div><div class="stat-card-sub up">↑ 14 vs yesterday</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="stat-card-label">Open Disputes</div><div class="stat-card-num">4</div><div class="stat-card-sub down">Needs attention</div></div>
+        </div>
+        <div class="dash-grid-2">
+          <div class="card"><div class="card-head"><h3>Platform Growth</h3><span class="card-head-sub">Bookings · Last 8 months</span></div><div class="card-body"><div class="chart-area"><div class="chart-bar" style="height:40%"></div><div class="chart-bar" style="height:55%"></div><div class="chart-bar" style="height:48%"></div><div class="chart-bar" style="height:72%"></div><div class="chart-bar" style="height:65%"></div><div class="chart-bar" style="height:85%"></div><div class="chart-bar" style="height:90%"></div><div class="chart-bar highlight" style="height:100%"></div></div></div></div>
+          <div class="card"><div class="card-head"><h3>Top Cities by Bookings</h3></div><div class="card-body"><div class="prog-row"><div class="prog-item"><div class="prog-label"><span>Bengaluru</span><span>8,400</span></div><div class="prog-bar"><div class="prog-fill pf-navy" style="width:100%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Pune</span><span>6,100</span></div><div class="prog-bar"><div class="prog-fill pf-teal" style="width:73%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Mumbai</span><span>5,200</span></div><div class="prog-bar"><div class="prog-fill pf-blue" style="width:62%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Hyderabad</span><span>3,900</span></div><div class="prog-bar"><div class="prog-fill pf-coral" style="width:46%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Chennai</span><span>2,800</span></div><div class="prog-bar"><div class="prog-fill pf-navy" style="width:33%;opacity:.4"></div></div></div></div></div></div>
+        </div>
+        <div class="card"><div class="card-head"><h3>Recent Activity</h3><button class="btn btn-ghost btn-sm">Export CSV</button></div><table><thead><tr><th>Time</th><th>Action</th><th>User</th><th>Details</th><th>Status</th></tr></thead><tbody>
+          <tr><td style="color:var(--muted)">10:42 AM</td><td>New Listing</td><td><strong>Ramesh K.</strong></td><td>Sunrise PG, Bengaluru</td><td><span class="pill pill-pending">Pending Verify</span></td></tr>
+          <tr><td style="color:var(--muted)">10:28 AM</td><td>Booking</td><td><strong>Priya Sharma</strong></td><td>Urban Nest, Pune — ₹60,500</td><td><span class="pill pill-active">Confirmed</span></td></tr>
+          <tr><td style="color:var(--muted)">10:15 AM</td><td>Dispute Filed</td><td><strong>Ankit Joshi</strong></td><td>Refund Request #D-1041</td><td><span class="pill pill-inactive">Needs Action</span></td></tr>
+          <tr><td style="color:var(--muted)">09:55 AM</td><td>New User</td><td><strong>Kavya Nair</strong></td><td>Tenant Registration</td><td><span class="pill pill-active">Active</span></td></tr>
+          <tr><td style="color:var(--muted)">09:40 AM</td><td>Review Posted</td><td><strong>Rohit Das</strong></td><td>★ 4.5 — Comfort Stay PG</td><td><span class="pill pill-active">Published</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Users -->
+      <div id="ad-users" style="display:none">
+        <div class="dash-topbar"><div><h1>Users</h1><p>Manage tenants, landlords and admin accounts.</p></div></div>
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-card-icon sci-navy"></div><div class="stat-card-label">Tenants</div><div class="stat-card-num">41,800</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-teal"></div><div class="stat-card-label">Landlords</div><div class="stat-card-num">6,140</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-coral"></div><div class="stat-card-label">Banned Users</div><div class="stat-card-num">38</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-blue"></div><div class="stat-card-label">New Today</div><div class="stat-card-num">124</div></div>
+        </div>
+        <div class="card"><div class="card-head"><h3>User Management</h3><div style="display:flex;gap:8px;"><input class="search-input" placeholder="Search users..."/><button class="btn btn-navy btn-sm">Search</button></div></div>
+        <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td><strong>Priya Sharma</strong></td><td>priya@email.com</td><td><span class="pill pill-info">Tenant</span></td><td>Nov 2025</td><td><span class="pill pill-active">Active</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">View</button><button class="btn btn-danger btn-sm">Ban</button></div></td></tr>
+          <tr><td><strong>Ramesh Kumar</strong></td><td>ramesh@email.com</td><td><span class="pill pill-active">Landlord</span></td><td>Aug 2024</td><td><span class="pill pill-active">Active</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">View</button><button class="btn btn-danger btn-sm">Ban</button></div></td></tr>
+          <tr><td><strong>Sanjay Patel</strong></td><td>sanjay@email.com</td><td><span class="pill pill-active">Landlord</span></td><td>Mar 2025</td><td><span class="pill pill-pending">Unverified</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('User verified!','teal')">Verify</button><button class="btn btn-danger btn-sm">Reject</button></div></td></tr>
+          <tr><td><strong>Arun Mishra</strong></td><td>arun@email.com</td><td><span class="pill pill-info">Tenant</span></td><td>Oct 2025</td><td><span class="pill pill-inactive">Banned</span></td><td><div class="btn-row"><button class="btn btn-success btn-sm" onclick="showToast('User unbanned','teal')">Unban</button></div></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Listings -->
+      <div id="ad-listings" style="display:none">
+        <div class="dash-topbar"><div><h1>Property Listings</h1><p>Review and verify new property submissions.</p></div></div>
+        <div class="card"><div class="card-head"><h3>Pending Verification (7)</h3><span class="card-head-sub">Requires admin review</span></div>
+        <table><thead><tr><th>Property</th><th>Owner</th><th>City</th><th>Rent</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead><tbody>
+          <tr><td><strong>Green Hill PG</strong></td><td>Sanjay Patel</td><td>Bengaluru</td><td>₹6,800</td><td>Dec 15</td><td><span class="pill pill-pending">Pending</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Review</button><button class="btn btn-success btn-sm" onclick="showToast('Listing approved!','teal')">Approve</button><button class="btn btn-danger btn-sm">Reject</button></div></td></tr>
+          <tr><td><strong>Lakeside PG</strong></td><td>Meena Iyer</td><td>Pune</td><td>₹8,200</td><td>Dec 15</td><td><span class="pill pill-pending">Pending</span></td><td><div class="btn-row"><button class="btn btn-ghost btn-sm">Review</button><button class="btn btn-success btn-sm" onclick="showToast('Listing approved!','teal')">Approve</button><button class="btn btn-danger btn-sm">Reject</button></div></td></tr>
+          <tr><td><strong>City Central PG</strong></td><td>Rahul Sen</td><td>Mumbai</td><td>₹12,500</td><td>Dec 14</td><td><span class="pill pill-active">Approved</span></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+          <tr><td><strong>Budget Boys PG</strong></td><td>Vikram Rao</td><td>Chennai</td><td>₹4,500</td><td>Dec 14</td><td><span class="pill pill-inactive">Rejected</span></td><td><button class="btn btn-ghost btn-sm">Reason</button></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Disputes -->
+      <div id="ad-disputes" style="display:none">
+        <div class="dash-topbar"><div><h1>Disputes</h1><p>Resolve conflicts between tenants and landlords.</p></div></div>
+        <div class="card"><table><thead><tr><th>ID</th><th>Filed By</th><th>Against</th><th>Issue</th><th>Date</th><th>Priority</th><th>Action</th></tr></thead><tbody>
+          <tr><td style="font-weight:700;color:var(--navy)">#D-1041</td><td>Ankit Joshi</td><td>Comfort Stay PG</td><td>Refund not received</td><td>Dec 14</td><td><span class="pill pill-inactive">High</span></td><td><button class="btn btn-navy btn-sm" onclick="showToast('Dispute resolved','teal')">Resolve</button></td></tr>
+          <tr><td style="font-weight:700;color:var(--navy)">#D-1038</td><td>Meera Roy</td><td>Ramesh Kumar</td><td>Property mismatch</td><td>Dec 12</td><td><span class="pill pill-pending">Medium</span></td><td><button class="btn btn-navy btn-sm" onclick="showToast('Dispute resolved','teal')">Resolve</button></td></tr>
+          <tr><td style="font-weight:700;color:var(--navy)">#D-1035</td><td>Karan Singh</td><td>Urban Nest PG</td><td>Amenities not as listed</td><td>Dec 10</td><td><span class="pill pill-pending">Medium</span></td><td><button class="btn btn-navy btn-sm">Resolve</button></td></tr>
+          <tr><td style="font-weight:700;color:var(--navy)">#D-1029</td><td>Divya Menon</td><td>Sunrise PG</td><td>Harassment complaint</td><td>Dec 8</td><td><span class="pill pill-inactive">High</span></td><td><button class="btn btn-navy btn-sm">Resolve</button></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Reports -->
+      <div id="ad-reports" style="display:none">
+        <div class="dash-topbar"><div><h1>Reports & Insights</h1><p>Platform-wide analytics for strategic decisions.</p></div><button class="btn btn-navy btn-sm">Download PDF</button></div>
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-card-icon sci-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-card-label">Avg. Booking Value</div><div class="stat-card-num" style="font-size:1.5rem;">₹28,400</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg></div><div class="stat-card-label">Platform Commission</div><div class="stat-card-num" style="font-size:1.5rem;">₹4.2L</div><div class="stat-card-sub">This month</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-blue"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-card-label">Avg. Rating</div><div class="stat-card-num">4.7 ★</div></div>
+          <div class="stat-card"><div class="stat-card-icon sci-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="stat-card-label">Churn Rate</div><div class="stat-card-num">2.3%</div></div>
+        </div>
+        <div class="dash-grid-2">
+          <div class="card"><div class="card-head"><h3>User Acquisition</h3></div><div class="card-body"><div class="chart-area"><div class="chart-bar" style="height:30%;background:rgba(59,107,204,0.2)"></div><div class="chart-bar" style="height:50%;background:rgba(59,107,204,0.2)"></div><div class="chart-bar" style="height:45%;background:rgba(59,107,204,0.25)"></div><div class="chart-bar" style="height:65%;background:rgba(59,107,204,0.25)"></div><div class="chart-bar" style="height:80%;background:rgba(59,107,204,0.3)"></div><div class="chart-bar" style="height:70%;background:rgba(59,107,204,0.35)"></div><div class="chart-bar" style="height:92%;background:rgba(59,107,204,0.4)"></div><div class="chart-bar" style="height:100%;background:rgba(59,107,204,0.6)"></div></div></div></div>
+          <div class="card"><div class="card-head"><h3>Revenue by Property Type</h3></div><div class="card-body"><div class="prog-row"><div class="prog-item"><div class="prog-label"><span>Single Occupancy</span><span>42%</span></div><div class="prog-bar"><div class="prog-fill pf-navy" style="width:42%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Double Occupancy</span><span>35%</span></div><div class="prog-bar"><div class="prog-fill pf-blue" style="width:35%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Triple Occupancy</span><span>15%</span></div><div class="prog-bar"><div class="prog-fill pf-teal" style="width:15%"></div></div></div><div class="prog-item"><div class="prog-label"><span>Co-living Spaces</span><span>8%</span></div><div class="prog-bar"><div class="prog-fill pf-coral" style="width:8%"></div></div></div></div></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+// ── Page navigation
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Navbar active link
+function setActive(el) {
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Login simulation
+function doLogin() {
+  document.getElementById('nav-guest').classList.add('hidden');
+  document.getElementById('nav-user').classList.remove('hidden');
+  showPage('home');
+  showToast('Welcome back, Priya! 👋', 'teal');
+}
+
+// ── Signup simulation
+function doSignup() {
+  document.getElementById('nav-guest').classList.add('hidden');
+  document.getElementById('nav-user').classList.remove('hidden');
+  showPage('home');
+  showToast('Account created! Welcome to PGFinder 🎉', 'teal');
+}
+
+// ── Role selector
+function selectRole(role) {
+  document.getElementById('role-tenant').classList.remove('selected');
+  document.getElementById('role-landlord').classList.remove('selected');
+  document.getElementById('role-' + role).classList.add('selected');
+}
+
+// ── Password toggle
+function togglePwd(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+// ── Password strength
+function checkPwdStrength(val) {
+  const bars = [document.getElementById('pb1'), document.getElementById('pb2'), document.getElementById('pb3')];
+  const lbl = document.getElementById('pwd-lbl');
+  bars.forEach(b => { b.className = 'pwd-bar'; });
+  if (val.length === 0) { lbl.textContent = 'Enter a password'; return; }
+  if (val.length < 6) { bars[0].classList.add('active-1'); lbl.textContent = 'Weak'; return; }
+  if (val.length < 10) { bars[0].classList.add('active-2'); bars[1].classList.add('active-2'); lbl.textContent = 'Fair'; return; }
+  bars.forEach(b => b.classList.add('active-3')); lbl.textContent = 'Strong ✓';
+}
+
+// ── Landlord dashboard tabs
+function landlordTab(btn, tabId) {
+  document.querySelectorAll('#page-landlord .sidebar-link').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#page-landlord [id^="ld-"]').forEach(t => t.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+// ── Admin dashboard tabs
+function adminTab(btn, tabId) {
+  document.querySelectorAll('#page-admin .sidebar-link').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#page-admin [id^="ad-"]').forEach(t => t.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+// ── Profile tabs
+function profileTab(btn, tabId) {
+  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[id^="pt-"]').forEach(t => t.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+// ── Payment method selector
+function setPayMethod(el) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+  const isUPI = el.textContent.trim().includes('UPI');
+  document.getElementById('card-form').style.display = isUPI ? 'none' : 'block';
+  document.getElementById('upi-form').style.display = isUPI ? 'block' : 'none';
+}
+
+// ── Toast notification
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '') + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
